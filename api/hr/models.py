@@ -1,6 +1,16 @@
 from django.db import models
 from django.conf import settings
 
+# country field
+from django_countries.fields import CountryField
+# Geopy
+from geopy.geocoders import Nominatim
+
+# Slugify
+from django.utils.text import slugify
+
+from datetime import datetime
+
 User = settings.AUTH_USER_MODEL
 
 class Status(models.IntegerChoices):
@@ -42,6 +52,7 @@ class AbstractModelHR(models.Model):
     end_date = models.DateField(blank=True, null=True)
     notes = models.CharField(max_length=250, blank=True, null=True)
     contract = models.URLField(blank=True, null=True)
+    slug = models.SlugField(unique=True, blank=True, null=True)
 
     class Meta:
         abstract = True
@@ -73,6 +84,14 @@ class Employee(
 
     def __str__(self):
         return f"{self.name}"
+    
+
+    def save(self, *args, **kwargs):
+
+        self.slug = slugify(f"{self.user.first_name} {self.user.last_name}")
+
+        super().save(*args, **kwargs)
+
 
 
 class Contractor(AbstractModelHR):
@@ -90,3 +109,106 @@ class Contractor(AbstractModelHR):
 
     def __str__(self):
         return f"{self.user}"
+    
+    def save(self, *args, **kwargs):
+        self.slug = slugify(f"{self.user.first_name} {self.user.last_name}")
+        super().save(*args, **kwargs)
+    
+
+# Volunteers
+
+class VolunteerSkill(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+
+    def __str__(self):
+        return f'{self.name}'
+    
+
+class VolunteeringArea(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+
+    def __str__(self):
+        return f'{self.name}'
+    
+
+class VolunteerApplication(models.Model):
+    STATUS_CHOICES = (
+        ('Pending', 'Pending'),
+        ('Accepted', 'Accepted'),
+        ('Rejected', 'Rejected'),
+    )
+
+    class LanguageSpoken(models.IntegerChoices):
+        ENGLISH = 1, 'English'
+        SPANISH = 2, 'Spanish'
+        PORTUGUESE = 3, 'Portuguese'
+        OTHER = 4, 'Other'
+
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100, blank=True, null=True)
+    email = models.EmailField(unique=True)
+    phone_number = models.CharField(max_length=20, blank=True)
+    bio = models.TextField(blank=True, null=True)
+    interests = models.CharField(max_length=100, blank=True, null=True)
+    skills = models.ManyToManyField(VolunteerSkill, blank=True)
+    country_origin = CountryField(blank=True, null=True)
+    language_spoken = models.IntegerField(choices=LanguageSpoken.choices, blank=True, default=1)
+    area_volunteering = models.ForeignKey(VolunteeringArea, on_delete=models.CASCADE, default=1)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return f'{self.first_name + " " + self.last_name}'
+    
+
+
+class Volunteer(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
+    application = models.ForeignKey(VolunteerApplication, on_delete=models.SET_NULL, null=True, blank=True)
+    supervisor = models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True, blank=True)
+    country = CountryField(blank=True, null=True)
+    latitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
+    photo = models.ImageField(upload_to='static/images/volunteers', blank=True)
+
+    def save(self, *args, **kwargs):
+        geolocator = Nominatim(user_agent='hr-app')
+        location = geolocator.geocode(str(self.country))
+        if location:
+            self.latitude = location.latitude
+            self.longitude = location.longitude
+        super(Volunteer, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.user.first_name} {self.user.last_name}"
+
+
+
+# TIMESHEETS
+
+class VolunteerHour(models.Model):
+    class LocationChoices(models.IntegerChoices):
+        RM = 1, 'Remote'
+        OF = 2, 'Office'
+        EV = 3, 'At Event'
+
+    volunteer = models.ForeignKey(Volunteer, on_delete=models.CASCADE)    
+    date = models.DateField(default=datetime.now)
+    time_in = models.TimeField(default=datetime.now().strftime('%H:%M:%S'))
+    time_out = models.TimeField(default=datetime.now().strftime('%H:%M:%S'))
+    hours_worked = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    location = models.IntegerField(choices=LocationChoices.choices, default='2')    
+
+    def save(self, *args, **kwargs):
+
+        # Calculate the number of hours worked based on the time_in and time_out fields
+        time_worked = datetime.combine(datetime.now().date(), self.time_out) - datetime.combine(datetime.now().date(), self.time_in)
+
+        self.hours_worked = round(time_worked.seconds / 3600, 2)
+        
+        super().save(*args, **kwargs)
+
+
+    def __str__(self):
+        return str(self.id)
