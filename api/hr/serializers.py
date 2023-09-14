@@ -2,7 +2,10 @@ from rest_framework import serializers
 
 from rest_framework.fields import CharField, DecimalField, EmailField, DateTimeField, IntegerField
 
-from .models import Employee, Contractor, JobTitle, Volunteer, VolunteerSkill, VolunteeringArea, VolunteerApplication
+from .models import (
+    Employee, Contractor, JobTitle, Volunteer, VolunteerSkill, VolunteeringArea,
+    VolunteerApplication, VolunteerHour, ScheduleEmployee, LeaveRequest, EmergencyContact
+    )
 
 from users.serializers import UserPublicSerializer
 
@@ -38,7 +41,9 @@ class ContractorSerializer(serializers.ModelSerializer):
 class VolunteerSerializer(serializers.ModelSerializer):
     class Meta:
         model=Volunteer
-        fields = "__all__"
+        fields = [
+            "user", "application", "supervisor", "country", "photo"
+        ]
 
 class VolunteerSkillsSerializer(serializers.ModelSerializer):
     class Meta:
@@ -65,3 +70,36 @@ class VolunteeringApplicationSerializer(serializers.ModelSerializer):
             "bio", "interests", "skills", "country_origin",
             "language_spoken", "are_volunteering", "status"
         ]
+
+
+class VolunteerHourSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = VolunteerHour
+        fields = [
+            "volunteer", "time_in", "time_out", "date", "location"
+        ]
+
+
+
+class ScheduleEmployeeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ScheduleEmployee
+        fields = [
+            "employee", "start_date", "end_date", "leave_type", "description"
+        ]
+
+
+class LeaveRequestSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = LeaveRequest
+        fields = "__all__"
+
+
+class EmergencyContactSerializers(serializers.ModelSerializer):
+
+    class Meta:
+        model = EmergencyContact
+        fields = "__all__"

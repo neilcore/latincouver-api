@@ -47,7 +47,7 @@ class AbstractModelHR(models.Model):
     work_type = models.IntegerField(choices=WorkType.choices, default=1)
     pay_method = models.IntegerField(choices=PayMethod.choices, default=1)
     salary = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    is_manager = models.BooleanField(default=False)
+    is_manager = models.BooleanField(default=False, verbose_name="Manager")
     start_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
     notes = models.CharField(max_length=250, blank=True, null=True)
@@ -175,6 +175,7 @@ class Volunteer(models.Model):
     def save(self, *args, **kwargs):
         geolocator = Nominatim(user_agent='hr-app')
         location = geolocator.geocode(str(self.country))
+        print(f'location: {location}')
         if location:
             self.latitude = location.latitude
             self.longitude = location.longitude
@@ -211,4 +212,71 @@ class VolunteerHour(models.Model):
 
 
     def __str__(self):
-        return str(self.id)
+        return f"{self.volunteer.user.last_name} {self.volunteer.user.first_name}"
+    
+
+
+
+
+# Schedules
+class ScheduleEmployee(models.Model):
+    DAY_CHOICES = [
+        ('Mon', 'Monday'),
+        ('Tue', 'Tuesday'),
+        ('Wed', 'Wednesday'),
+        ('Thu', 'Thursday'),
+        ('Fri', 'Friday'),
+        ('Sat', 'Saturday'),
+        ('Sun', 'Sunday'),
+    ]
+
+    TYPE_CHOICES = [
+        ('home', 'Home'),
+        ('office', 'Office'),
+    ]
+
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='schedules')
+    day_of_week = models.CharField(max_length=3, choices=DAY_CHOICES)
+    start_time = models.TimeField()
+    end_time = models.TimeField(null=True, blank=True)
+    home_office = models.CharField(max_length=10, choices=TYPE_CHOICES)
+
+    def __str__(self):
+        return f"{self.get_day_of_week_display()} - {self.employee}"
+
+
+
+
+#  Leave Requests
+
+class LeaveRequest(models.Model):
+
+    LEAVE_TYPES = [
+        ('S', 'Sick Leave'),
+        ('V', 'Vacation'),
+        ('H', 'Work from Home'),
+        ('O', 'Day-Off'),
+    ]
+
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name="employee_leave_request_fk")
+    start_date = models.DateField()
+    end_date = models.DateField()
+    leave_type = models.CharField(max_length=2, choices=LEAVE_TYPES)
+    description = models.TextField()
+    approved = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.employee.user.first_name} {self.employee.user.last_name} - {self.start_date} to {self.end_date} ({self.leave_type})"
+
+
+
+
+
+class EmergencyContact(models.Model):
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE, related_Name="employee_emergency_contact_fk")
+    name = models.CharField(max_length=150)
+    relationship = models.CharField(max_length=100)
+    phone = models.CharField(max_length=20)
+
+    def __str__(self):
+        return f"{self.employee} _ {self.name}"

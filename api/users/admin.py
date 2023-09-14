@@ -5,22 +5,27 @@ from .models import CustomUser
 
 class CustomUserAdmin(UserAdmin):
     model = CustomUser
-    list_display = ("username", "is_staff", "is_active",)
+    list_display = ("username", "first_name", "last_name", "is_staff", "is_active",)
     list_filter = ("username", "is_staff", "is_active",)
     fieldsets = (
-        (None, {"fields": ("username", "password")}),
+        ("Personal Information", {"fields": ("username", "first_name", "last_name", "password")}),
         ("Permissions", {"fields": ("is_staff", "is_active", "groups", "user_permissions")}),
     )
     add_fieldsets = (
-        (None, {
+        ("Personal Information", {
             "classes": ("wide",),
             "fields": (
-                "username", "password1", "password2", "is_staff",
-                "is_active", "groups", "user_permissions"
+                "username", "first_name", "last_name", "password1", "password2"
             )}
-         ),
+        ),
+        ("Permissions", {
+            "classes": ("wide",),
+            "fields": (
+                "is_staff", "is_active", "groups", "user_permissions"
+            )}
+        ),
     )
-    search_fields = ("username",)
+    search_fields = ("username", "last_name")
     ordering = ("username",)
 
 
