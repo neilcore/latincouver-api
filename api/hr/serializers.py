@@ -4,7 +4,7 @@ from rest_framework.fields import CharField, DecimalField, EmailField, DateTimeF
 
 from .models import (
     Employee, Contractor, JobTitle, Volunteer, VolunteerSkill, VolunteeringArea,
-    VolunteerApplication, VolunteerHour, ScheduleEmployee, LeaveRequest, EmergencyContact
+    VolunteerApplication, VolunteerHour, ScheduleEmployee, LeaveRequest, EmergencyContact, Departments
     )
 
 from users.serializers import UserPublicSerializer
@@ -102,4 +102,11 @@ class EmergencyContactSerializers(serializers.ModelSerializer):
 
     class Meta:
         model = EmergencyContact
+        fields = "__all__"
+
+
+class DepartmentsSerializers(serializers.ModelSerializer):
+
+    class Meta:
+        model = Departments
         fields = "__all__"

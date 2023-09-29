@@ -12,7 +12,8 @@ from .serializers import (
     VolunteerHourSerializer,
     ScheduleEmployeeSerializer,
     LeaveRequestSerializer,
-    EmergencyContactSerializers
+    EmergencyContactSerializers,
+    DepartmentsSerializers
 
 )
 
@@ -20,7 +21,7 @@ from .serializers import (
 from .models import (
     JobTitle, Employee, Contractor, VolunteerSkill, VolunteeringArea,
     VolunteerApplication, VolunteerHour, ScheduleEmployee, LeaveRequest,
-    EmergencyContact
+    EmergencyContact, Departments
 )
 
 
@@ -71,3 +72,10 @@ class LeaveRequestAPIView(generics.CreateAPIView):
 class EmergencyContactAPIView(generics.CreateAPIView):
     queryset = EmergencyContact.objects.all()
     serializer_class = EmergencyContactSerializers
+
+
+
+class DepartmentAPIView(generics.CreateListView):
+    queryset = Departments.objects.all()
+    
+    serializer_class = DepartmentsSerializers
