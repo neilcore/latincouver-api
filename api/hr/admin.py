@@ -1,7 +1,8 @@
 from django.contrib import admin
 from .models import (
     Employee, Contractor, JobTitle, VolunteerHour,
-    Volunteer, VolunteerApplication, VolunteeringArea, VolunteerSkill
+    Volunteer, VolunteerApplication, VolunteeringArea, VolunteerSkill,
+    ScheduleEmployee, Departments
 )
 
 
@@ -30,6 +31,19 @@ class CustomVolunteerHour(admin.ModelAdmin):
 
     def volunteer_username(self, obj) -> str:
         return f"{obj.volunteer.user.first_name} {obj.volunteer.user.last_name}"
+    
+
+
+class CustomScheduleEmployee(admin.ModelAdmin):
+    model = ScheduleEmployee
+    list_display = (
+        "schedule_employee", "day_of_week", "start_time", "end_time", "home_office"
+    )
+
+    def schedule_employee(self, obj) -> str:
+        return f"{obj.employee.user.first_name} {obj.employee.user.last_name}"
+    
+
 
 admin.site.register(JobTitle)
 admin.site.register(Employee, CustomEmployeeAdmin)
@@ -39,3 +53,5 @@ admin.site.register(VolunteerApplication, CustomVolunterringApplication)
 admin.site.register(VolunteeringArea)
 admin.site.register(VolunteerSkill)
 admin.site.register(VolunteerHour, CustomVolunteerHour)
+admin.site.register(ScheduleEmployee, CustomScheduleEmployee)
+admin.site.register(Departments)

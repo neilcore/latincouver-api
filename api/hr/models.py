@@ -39,6 +39,19 @@ class JobTitle(models.Model):
     class Meta:
         verbose_name_plural = "Job Titles"
 
+#  Department Model
+
+class Departments(models.Model):
+    name = models.CharField(max_length=200)
+
+    def __str__(self) -> str:
+        return self.name.upper() if self.name == "it" else self.name.title()
+    
+
+    class Meta:
+        verbose_name_plural = "Departments"
+    
+
 
 class AbstractModelHR(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -61,16 +74,9 @@ class AbstractModelHR(models.Model):
 class Employee(
     AbstractModelHR
 ):
-    
-    class Departments(models.IntegerChoices):
-        HR = 1, 'Human Resources'
-        FIN = 2, 'Finance'
-        MKT = 3, 'Marketing'
-        OPS = 4, 'Operations'
-        IT = 5, 'IT'
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='employee')
-    department = models.IntegerField(choices=Departments.choices)
+    department = models.ManyToManyField(Departments)
 
     allergies = models.CharField(max_length=200, blank=True, null=True)
     medical_condition = models.CharField(max_length=200, blank=True, null=True)
@@ -96,16 +102,8 @@ class Employee(
 
 class Contractor(AbstractModelHR):
 
-    class Departments(models.IntegerChoices):
-        HR = 1, 'Human Resources'
-        FIN = 2, 'Finance'
-        MKT = 3, 'Marketing'
-        OPS = 4, 'Operations'
-        IT = 5, 'Information Technology'
-        GT = 6, 'Grants'
-
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='contractor')
-    department = models.IntegerField(choices=Departments.choices)
+    department = models.ManyToManyField(Departments)
 
     def __str__(self):
         return f"{self.user}"
@@ -273,7 +271,7 @@ class LeaveRequest(models.Model):
 
 
 class EmergencyContact(models.Model):
-    employee = models.ForeignKey(Employee, on_delete=models.CASCADE, related_Name="employee_emergency_contact_fk")
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name="employee_emergency_contact_fk")
     name = models.CharField(max_length=150)
     relationship = models.CharField(max_length=100)
     phone = models.CharField(max_length=20)
