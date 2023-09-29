@@ -75,7 +75,7 @@ class EmergencyContactAPIView(generics.CreateAPIView):
 
 
 
-class DepartmentAPIView(generics.CreateListView):
+class DepartmentAPIView(generics.ListCreateAPIView):
     queryset = Departments.objects.all()
     
     serializer_class = DepartmentsSerializers
