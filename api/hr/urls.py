@@ -11,6 +11,7 @@ urlpatterns = [
     path('api/hr/volunteering-skills/', views.VolunteerSkillsAPIView.as_view(), name="hr-volunteering-skills"),
     path('api/hr/volunteering-hour/', views.VolunteerHourAPIView.as_view(), name="hr-volunteering-hour"),
     path('api/hr/volunteering-schedule/', views.ScheduleEmployeeAPIView.as_view(), name="hr-volunteering-schedule"),
+    #Emergency Contact
     path('api/hr/emergency-contact/', views.LeaveRequestAPIView.as_view(), name="hr-emergency-contacts"),
     #Department
     path('api/hr/departments/', views.DepartmentAPIView.as_view(), name="hr-departments"),

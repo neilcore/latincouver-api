@@ -27,6 +27,12 @@ class PayMethod(models.IntegerChoices):
     HR = 2, 'Hourly'
 
 
+class GenderChoices(models.IntegerChoices):
+    ML = 1, 'Male'
+    FM = 2, 'Female'
+    OT = 3, 'Others'
+
+
 
 class JobTitle(models.Model):
 
@@ -76,6 +82,7 @@ class Employee(
 ):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='employee')
+    gender = models.IntegerField(choices=GenderChoices.choices, blank=True, null=True)
     department = models.ManyToManyField(Departments)
 
     allergies = models.CharField(max_length=200, blank=True, null=True)
@@ -153,6 +160,7 @@ class VolunteerApplication(models.Model):
     language_spoken = models.IntegerField(choices=LanguageSpoken.choices, blank=True, default=1)
     area_volunteering = models.ForeignKey(VolunteeringArea, on_delete=models.CASCADE, default=1)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending')
+    reason = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
@@ -163,6 +171,7 @@ class VolunteerApplication(models.Model):
 
 class Volunteer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
+    gender = models.IntegerField(choices=GenderChoices.choices, blank=True, null=True)
     application = models.ForeignKey(VolunteerApplication, on_delete=models.SET_NULL, null=True, blank=True)
     supervisor = models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True, blank=True)
     country = CountryField(blank=True, null=True)
