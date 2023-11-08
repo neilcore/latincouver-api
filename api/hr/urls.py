@@ -1,19 +1,30 @@
 from django.urls import path
 from . import views
 
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+    TokenVerifyView,
+)
+
+
 urlpatterns = [
-    path('api/hr/employees/', views.EmployeeAPIView.as_view(), name="hr-employees"),
-    path('api/hr/contractors/', views.ContractorAPIView.as_view(), name="hr-contractors"),
-    path('api/hr/job-titles/', views.JobTitleAPIView.as_view(), name="hr-job-titles"),
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
+
+    path('api/v1/hr/employees/', views.EmployeeAPIView.as_view(), name="hr-employees"),
+    path('api/v1/hr/contractors/', views.ContractorAPIView.as_view(), name="hr-contractors"),
+    path('api/v1/hr/job-titles/', views.JobTitleAPIView.as_view(), name="hr-job-titles"),
     # Volunteers
-    path('api/hr/volunteering-application/', views.VolunteeringApplicationAPIView.as_view(), name="hr-volunteering-application"),
-    path('api/hr/volunteering-area/', views.VolunteeringAreaAPIView.as_view(), name="hr-volunteering-area"),
-    path('api/hr/volunteering-skills/', views.VolunteerSkillsAPIView.as_view(), name="hr-volunteering-skills"),
-    path('api/hr/volunteering-hour/', views.VolunteerHourAPIView.as_view(), name="hr-volunteering-hour"),
-    path('api/hr/volunteering-schedule/', views.ScheduleEmployeeAPIView.as_view(), name="hr-volunteering-schedule"),
+    path('api/v1/hr/volunteering-application/', views.VolunteeringApplicationAPIView.as_view(), name="hr-volunteering-application"),
+    path('api/v1/hr/volunteering-area/', views.VolunteeringAreaAPIView.as_view(), name="hr-volunteering-area"),
+    path('api/v1/hr/volunteering-skills/', views.VolunteerSkillsAPIView.as_view(), name="hr-volunteering-skills"),
+    path('api/v1/hr/volunteering-hour/', views.VolunteerHourAPIView.as_view(), name="hr-volunteering-hour"),
+    path('api/v1/hr/volunteering-schedule/', views.ScheduleEmployeeAPIView.as_view(), name="hr-volunteering-schedule"),
     #Emergency Contact
-    path('api/hr/emergency-contact/', views.LeaveRequestAPIView.as_view(), name="hr-emergency-contacts"),
+    path('api/v1/hr/emergency-contact/', views.LeaveRequestAPIView.as_view(), name="hr-emergency-contacts"),
     #Department
-    path('api/hr/departments/', views.DepartmentAPIView.as_view(), name="hr-departments"),
+    path('api/v1/hr/departments/', views.DepartmentAPIView.as_view(), name="hr-departments"),
 
 ]
