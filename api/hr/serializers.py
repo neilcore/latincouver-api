@@ -4,7 +4,7 @@ from rest_framework.fields import CharField, DecimalField, EmailField, DateTimeF
 
 from .models import (
     Employee, Contractor, JobTitle, Volunteer, VolunteerSkill, VolunteeringArea,
-    VolunteerApplication, VolunteerHour, ScheduleEmployee, LeaveRequest, EmergencyContact, Departments
+    VolunteerApplication, VolunteerHour, ScheduleEmployee, LeaveRequest, EmergencyContact, Departments, WorkType
     )
 
 from users.serializers import UserPublicSerializer
@@ -16,8 +16,12 @@ class JobTitleSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+
 class EmployeeSerializer(serializers.ModelSerializer):
     user = UserPublicSerializer(read_only=True)
+    department = serializers.StringRelatedField(many=True)
+    title = serializers.StringRelatedField(many=False)
+
     class Meta:
         model=Employee
         fields = [
@@ -40,6 +44,8 @@ class ContractorSerializer(serializers.ModelSerializer):
 
 class VolunteerSerializer(serializers.ModelSerializer):
     user = UserPublicSerializer(read_only=True)
+    supervisor = serializers.StringRelatedField(many=False)
+    application = serializers.StringRelatedField(many=False)
     class Meta:
         model=Volunteer
         fields = [

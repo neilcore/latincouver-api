@@ -36,9 +36,24 @@ class ContractorAPIView(generics.ListCreateAPIView):
     serializer_class = ContractorSerializer
 
 
+# Employee
+
 class EmployeeAPIView(generics.ListCreateAPIView):
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
+
+class EmployeeDetailAPIView(generics.RetrieveAPIView):
+    queryset = Employee.objects.all()
+    serializer_class = EmployeeSerializer
+    lookup_field = "pk"
+
+class EmployeeDeleteAPIView(generics.DestroyAPIView):
+    queryset = Employee.objects.all()
+    serializer_class = EmployeeSerializer
+    lookup_field = 'pk'
+
+    def perform_destroy(self, instance):
+        return super().perform_destroy(instance)
 
 # Volunteers
 

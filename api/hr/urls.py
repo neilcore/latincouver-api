@@ -9,11 +9,16 @@ from rest_framework_simplejwt.views import (
 
 
 urlpatterns = [
+    # token
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
 
+    # Employees
     path('api/v1/hr/employees/', views.EmployeeAPIView.as_view(), name="hr-employees"),
+    path('api/v1/hr/employees/detail/<int:pk>/', views.EmployeeDetailAPIView.as_view(), name="employee-detail"),
+    path('api/v1/hr/employees/delete/<int:pk>/', views.EmployeeDeleteAPIView.as_view(), name="employee-delete"),
+
     path('api/v1/hr/contractors/', views.ContractorAPIView.as_view(), name="hr-contractors"),
     path('api/v1/hr/job-titles/', views.JobTitleAPIView.as_view(), name="hr-job-titles"),
     # Volunteers
