@@ -21,7 +21,7 @@ class EmployeeSerializer(serializers.ModelSerializer):
     class Meta:
         model=Employee
         fields = [
-            'user', 'department', 'title', 'bio', 'work_type', 'pay_method',
+            'pk', 'user', 'department', 'title', 'bio', 'work_type', 'pay_method',
             'salary', 'is_manager', 'start_date', 'end_date', 'notes',
             'contract', 'gender', 'allergies', 'medical_condition', 'photo'
         ]
@@ -39,6 +39,7 @@ class ContractorSerializer(serializers.ModelSerializer):
 
 
 class VolunteerSerializer(serializers.ModelSerializer):
+    user = UserPublicSerializer(read_only=True)
     class Meta:
         model=Volunteer
         fields = [

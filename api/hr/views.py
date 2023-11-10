@@ -6,6 +6,7 @@ from .serializers import (
     EmployeeSerializer,
     JobTitleSerializer,
     ContractorSerializer,
+    VolunteerSerializer,
     VolunteeringApplicationSerializer,
     VolunteerSkillsSerializer,
     VolunteeringAreaSerializer,
@@ -19,7 +20,7 @@ from .serializers import (
 
 # Models
 from .models import (
-    JobTitle, Employee, Contractor, VolunteerSkill, VolunteeringArea,
+    JobTitle, Employee, Contractor, Volunteer, VolunteerSkill, VolunteeringArea,
     VolunteerApplication, VolunteerHour, ScheduleEmployee, LeaveRequest,
     EmergencyContact, Departments
 )
@@ -40,6 +41,11 @@ class EmployeeAPIView(generics.ListCreateAPIView):
     serializer_class = EmployeeSerializer
 
 # Volunteers
+
+class VolunteerAPIView(generics.ListCreateAPIView):
+    queryset = Volunteer.objects.all()
+    serializer_class = VolunteerSerializer
+
 
 class VolunteerSkillsAPIView(generics.ListCreateAPIView):
     queryset = VolunteerSkill.objects.all()
