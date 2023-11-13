@@ -18,10 +18,6 @@ class JobTitleSerializer(serializers.ModelSerializer):
 
 
 class EmployeeSerializer(serializers.ModelSerializer):
-    user = UserPublicSerializer(read_only=True)
-    department = serializers.StringRelatedField(many=True)
-    title = serializers.StringRelatedField(many=False)
-
     class Meta:
         model=Employee
         fields = [
@@ -32,7 +28,6 @@ class EmployeeSerializer(serializers.ModelSerializer):
 
 
 class ContractorSerializer(serializers.ModelSerializer):
-    user = UserPublicSerializer(read_only=True)
     class Meta:
         model=Contractor
         fields=[
@@ -43,9 +38,9 @@ class ContractorSerializer(serializers.ModelSerializer):
 
 
 class VolunteerSerializer(serializers.ModelSerializer):
-    user = UserPublicSerializer(read_only=True)
-    supervisor = serializers.StringRelatedField(many=False)
-    application = serializers.StringRelatedField(many=False)
+    # user = UserPublicSerializer(read_only=True)
+    # supervisor = serializers.StringRelatedField(many=False)
+    # application = serializers.StringRelatedField(many=False)
     class Meta:
         model=Volunteer
         fields = [
@@ -55,27 +50,27 @@ class VolunteerSerializer(serializers.ModelSerializer):
 class VolunteerSkillsSerializer(serializers.ModelSerializer):
     class Meta:
         model=VolunteerSkill
-        fields= ['name']
+        fields= '__all__'
 
 
 
 class VolunteeringAreaSerializer(serializers.ModelSerializer):
     class Meta:
         model=VolunteeringArea
-        fields = ['name']
+        fields = '__all__'
 
 
 class VolunteeringApplicationSerializer(serializers.ModelSerializer):
 
-    skills = serializers.PrimaryKeyRelatedField(queryset=VolunteerSkill.objects.all(), required=False, many=True)
-    area_volunteering = serializers.PrimaryKeyRelatedField(queryset=VolunteeringArea.objects.all())
+    # skills = serializers.PrimaryKeyRelatedField(queryset=VolunteerSkill.objects.all(), required=False, many=True)
+    # area_volunteering = serializers.PrimaryKeyRelatedField(queryset=VolunteeringArea.objects.all())
 
     class Meta:
         model=VolunteerApplication
         fields = [
             "first_name", "last_name", "email", "phone_number",
             "bio", "interests", "skills", "country_origin",
-            "language_spoken", "are_volunteering", "status"
+            "language_spoken", "area_volunteering", "reason", "status"
         ]
 
 
@@ -94,7 +89,7 @@ class ScheduleEmployeeSerializer(serializers.ModelSerializer):
     class Meta:
         model = ScheduleEmployee
         fields = [
-            "employee", "start_date", "end_date", "leave_type", "description"
+            "employee", "start_time", "end_time", "home_office"
         ]
 
 

@@ -76,9 +76,9 @@ class VolunteeringApplicationAPIView(generics.ListCreateAPIView):
     serializer_class = VolunteeringApplicationSerializer
 
 
-class VolunteerHourAPIView(generics.CreateAPIView):
+class VolunteerHourAPIView(generics.ListCreateAPIView):
     queryset = VolunteerHour.objects.all()
-    serilizer_class = VolunteerHourSerializer
+    serializer_class = VolunteerHourSerializer
 
 
 class ScheduleEmployeeAPIView(generics.CreateAPIView):

@@ -18,6 +18,7 @@ urlpatterns = [
     path('api/v1/hr/employees/', views.EmployeeAPIView.as_view(), name="hr-employees"),
     path('api/v1/hr/employees/detail/<int:pk>/', views.EmployeeDetailAPIView.as_view(), name="employee-detail"),
     path('api/v1/hr/employees/delete/<int:pk>/', views.EmployeeDeleteAPIView.as_view(), name="employee-delete"),
+        path('api/v1/hr/employees-schedule/', views.ScheduleEmployeeAPIView.as_view(), name="hr-employees-schedule"),
 
     path('api/v1/hr/contractors/', views.ContractorAPIView.as_view(), name="hr-contractors"),
     path('api/v1/hr/job-titles/', views.JobTitleAPIView.as_view(), name="hr-job-titles"),
@@ -27,7 +28,6 @@ urlpatterns = [
     path('api/v1/hr/volunteering-area/', views.VolunteeringAreaAPIView.as_view(), name="hr-volunteering-area"),
     path('api/v1/hr/volunteering-skills/', views.VolunteerSkillsAPIView.as_view(), name="hr-volunteering-skills"),
     path('api/v1/hr/volunteering-hour/', views.VolunteerHourAPIView.as_view(), name="hr-volunteering-hour"),
-    path('api/v1/hr/volunteering-schedule/', views.ScheduleEmployeeAPIView.as_view(), name="hr-volunteering-schedule"),
     #Emergency Contact
     path('api/v1/hr/emergency-contact/', views.LeaveRequestAPIView.as_view(), name="hr-emergency-contacts"),
     #Department
