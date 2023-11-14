@@ -17,7 +17,22 @@ class JobTitleSerializer(serializers.ModelSerializer):
 
 
 
-class EmployeeSerializer(serializers.ModelSerializer):
+class EmployeeCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Employee
+        fields = [
+            'pk', 'user', 'department', 'title', 'bio', 'work_type', 'pay_method',
+            'salary', 'is_manager', 'start_date', 'end_date', 'notes',
+            'contract', 'gender', 'allergies', 'medical_condition', 'photo'
+        ]
+
+
+class EmployeeViewSerializer(serializers.ModelSerializer):
+    user = serializers.StringRelatedField(many=False)
+    department = serializers.StringRelatedField(many=True)
+    # title = serializers.StringRelatedField(many=False)
+    title = serializers.PrimaryKeyRelatedField(many=False, read_only=True)
+
     class Meta:
         model=Employee
         fields = [

@@ -12,3 +12,9 @@ def defaultPage(requests):
 class UsersAPIView(generics.ListCreateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
+
+
+class GetUserDetailAPIView(generics.RetrieveAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
+    lookup_field = "pk"

@@ -15,13 +15,16 @@ urlpatterns = [
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
 
     # Employees
-    path('api/v1/hr/employees/', views.EmployeeAPIView.as_view(), name="hr-employees"),
+    path('api/v1/hr/employees-create/', views.EmployeeCreateAPIView.as_view(), name="hr-employees"),
+    path('api/v1/hr/employees-update/', views.EmployeeUpdateAPIView.as_view(), name="hr-employee-update"),
+    path('api/v1/hr/employee-records/', views.EmployeeListAPIView.as_view(), name="employee_records"),
     path('api/v1/hr/employees/detail/<int:pk>/', views.EmployeeDetailAPIView.as_view(), name="employee-detail"),
     path('api/v1/hr/employees/delete/<int:pk>/', views.EmployeeDeleteAPIView.as_view(), name="employee-delete"),
         path('api/v1/hr/employees-schedule/', views.ScheduleEmployeeAPIView.as_view(), name="hr-employees-schedule"),
 
     path('api/v1/hr/contractors/', views.ContractorAPIView.as_view(), name="hr-contractors"),
     path('api/v1/hr/job-titles/', views.JobTitleAPIView.as_view(), name="hr-job-titles"),
+    path('api/v1/hr/job-titles/<int:pk>/', views.JobTitleDetailAPIView.as_view(), name="hr-job-title-detail"),
     # Volunteers
     path('api/v1/hr/volunteer/', views.VolunteerAPIView.as_view(), name="hr-volunteer"),
     path('api/v1/hr/volunteering-application/', views.VolunteeringApplicationAPIView.as_view(), name="hr-volunteering-application"),
@@ -32,5 +35,6 @@ urlpatterns = [
     path('api/v1/hr/emergency-contact/', views.LeaveRequestAPIView.as_view(), name="hr-emergency-contacts"),
     #Department
     path('api/v1/hr/departments/', views.DepartmentAPIView.as_view(), name="hr-departments"),
+    path('api/v1/hr/departments/<int:pk>/', views.DepartmentDetailsAPIView.as_view(), name="hr-department-detail"),
 
 ]

@@ -3,7 +3,8 @@ from rest_framework import generics
 
 # Serializers
 from .serializers import (
-    EmployeeSerializer,
+    EmployeeCreateSerializer,
+    EmployeeViewSerializer,
     JobTitleSerializer,
     ContractorSerializer,
     VolunteerSerializer,
@@ -30,6 +31,11 @@ class JobTitleAPIView(generics.ListCreateAPIView):
     queryset = JobTitle.objects.all()
     serializer_class = JobTitleSerializer
 
+class JobTitleDetailAPIView(generics.RetrieveAPIView):
+    queryset = JobTitle.objects.all()
+    serializer_class = JobTitleSerializer
+    lookup_field = "pk"
+
 
 class ContractorAPIView(generics.ListCreateAPIView):
     queryset = Contractor.objects.all()
@@ -37,19 +43,34 @@ class ContractorAPIView(generics.ListCreateAPIView):
 
 
 # Employee
-
-class EmployeeAPIView(generics.ListCreateAPIView):
+# create
+class EmployeeCreateAPIView(generics.CreateAPIView):
     queryset = Employee.objects.all()
-    serializer_class = EmployeeSerializer
+    serializer_class = EmployeeCreateSerializer
+
+
+# Update
+
+class EmployeeUpdateAPIView(generics.UpdateAPIView):
+    queryset = Employee.objects.all()
+    serializer_class = EmployeeCreateSerializer
+
+    
+
+# records display
+class EmployeeListAPIView(generics.ListAPIView):
+    queryset = Employee.objects.all()
+    serializer_class = EmployeeViewSerializer
 
 class EmployeeDetailAPIView(generics.RetrieveAPIView):
     queryset = Employee.objects.all()
-    serializer_class = EmployeeSerializer
+    # serializer_class = EmployeeCreateSerializer
+    serializer_class = EmployeeViewSerializer
     lookup_field = "pk"
 
 class EmployeeDeleteAPIView(generics.DestroyAPIView):
     queryset = Employee.objects.all()
-    serializer_class = EmployeeSerializer
+    serializer_class = EmployeeCreateSerializer
     lookup_field = 'pk'
 
     def perform_destroy(self, instance):
@@ -100,3 +121,10 @@ class DepartmentAPIView(generics.ListCreateAPIView):
     queryset = Departments.objects.all()
     
     serializer_class = DepartmentsSerializers
+
+
+
+class DepartmentDetailsAPIView(generics.RetrieveAPIView):
+    queryset = Departments.objects.all()
+    serializer_class = DepartmentsSerializers
+    lookup_field = "pk"
