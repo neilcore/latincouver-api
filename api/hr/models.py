@@ -87,7 +87,7 @@ class Employee(
 
     allergies = models.CharField(max_length=200, blank=True, null=True)
     medical_condition = models.CharField(max_length=200, blank=True, null=True)
-    photo = models.ImageField(upload_to='static/images/employees', blank=True)
+    photo = models.ImageField(upload_to='static/images/employees', default='default_pic.png')
 
     @property
     def name(self):
@@ -177,12 +177,11 @@ class Volunteer(models.Model):
     country = CountryField(blank=True, null=True)
     latitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
     longitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
-    photo = models.ImageField(upload_to='static/images/volunteers', blank=True)
+    photo = models.ImageField(upload_to='static/images/volunteers', default='default_pic.png')
 
     def save(self, *args, **kwargs):
         geolocator = Nominatim(user_agent='hr-app')
         location = geolocator.geocode(str(self.country))
-        print(f'location: {location}')
         if location:
             self.latitude = location.latitude
             self.longitude = location.longitude

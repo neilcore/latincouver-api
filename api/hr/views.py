@@ -3,8 +3,7 @@ from rest_framework import generics
 
 # Serializers
 from .serializers import (
-    EmployeeCreateSerializer,
-    EmployeeViewSerializer,
+    EmployeeListCreateSerializer,
     JobTitleSerializer,
     ContractorSerializer,
     VolunteerSerializer,
@@ -42,45 +41,33 @@ class ContractorAPIView(generics.ListCreateAPIView):
     serializer_class = ContractorSerializer
 
 
-# Employee
-# create
-class EmployeeCreateAPIView(generics.CreateAPIView):
+# list and create
+class EmployeeListCreateAPIView(generics.ListCreateAPIView):
     queryset = Employee.objects.all()
-    serializer_class = EmployeeCreateSerializer
+    serializer_class = EmployeeListCreateSerializer
 
 
-# Update
 
-class EmployeeUpdateAPIView(generics.UpdateAPIView):
+# retrieve | update | delete
+class EmployeeRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Employee.objects.all()
-    serializer_class = EmployeeCreateSerializer
-
-    
-
-# records display
-class EmployeeListAPIView(generics.ListAPIView):
-    queryset = Employee.objects.all()
-    serializer_class = EmployeeViewSerializer
-
-class EmployeeDetailAPIView(generics.RetrieveAPIView):
-    queryset = Employee.objects.all()
-    # serializer_class = EmployeeCreateSerializer
-    serializer_class = EmployeeViewSerializer
+    serializer_class = EmployeeListCreateSerializer
     lookup_field = "pk"
 
-class EmployeeDeleteAPIView(generics.DestroyAPIView):
-    queryset = Employee.objects.all()
-    serializer_class = EmployeeCreateSerializer
-    lookup_field = 'pk'
 
-    def perform_destroy(self, instance):
-        return super().perform_destroy(instance)
 
 # Volunteers
-
+# list and create
 class VolunteerAPIView(generics.ListCreateAPIView):
     queryset = Volunteer.objects.all()
     serializer_class = VolunteerSerializer
+
+
+# retrieve | update | delete
+class VolunteerRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Volunteer.objects.all()
+    serializer_class = VolunteerSerializer
+    lookup_field = "pk"
 
 
 class VolunteerSkillsAPIView(generics.ListCreateAPIView):
