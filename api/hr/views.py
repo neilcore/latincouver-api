@@ -1,6 +1,10 @@
 from django.shortcuts import render
 from rest_framework import generics
 
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+
 # Serializers
 from .serializers import (
     EmployeeListCreateSerializer,
@@ -14,7 +18,8 @@ from .serializers import (
     ScheduleEmployeeSerializer,
     LeaveRequestSerializer,
     EmergencyContactSerializers,
-    DepartmentsSerializers
+    DepartmentsSerializers,
+    CountryChoiceSerializer
 
 )
 
@@ -22,15 +27,31 @@ from .serializers import (
 from .models import (
     JobTitle, Employee, Contractor, Volunteer, VolunteerSkill, VolunteeringArea,
     VolunteerApplication, VolunteerHour, ScheduleEmployee, LeaveRequest,
-    EmergencyContact, Departments
+    EmergencyContact, Departments, GenderChoices
 )
 
 
+class CountriesChoicesAPI(APIView):
+
+    def get(self, request):
+        from django_countries import countries
+        countries_choices = dict(countries)
+        return Response(countries_choices)
+    
+
+# list and create
 class JobTitleAPIView(generics.ListCreateAPIView):
     queryset = JobTitle.objects.all()
     serializer_class = JobTitleSerializer
 
-class JobTitleDetailAPIView(generics.RetrieveAPIView):
+# retrieve and update
+class JobTitleDetailUpdateAPIView(generics.RetrieveUpdateAPIView):
+    queryset = JobTitle.objects.all()
+    serializer_class = JobTitleSerializer
+    lookup_field = "pk"
+
+# destroy
+class JobTitleDestropAPI(generics.DestroyAPIView):
     queryset = JobTitle.objects.all()
     serializer_class = JobTitleSerializer
     lookup_field = "pk"
@@ -70,6 +91,7 @@ class VolunteerRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView
     lookup_field = "pk"
 
 
+# list and create
 class VolunteerSkillsAPIView(generics.ListCreateAPIView):
     queryset = VolunteerSkill.objects.all()
     serializer_class = VolunteerSkillsSerializer
@@ -79,6 +101,7 @@ class VolunteeringAreaAPIView(generics.ListCreateAPIView):
     serializer_class = VolunteeringAreaSerializer
 
 
+# list and create
 class VolunteeringApplicationAPIView(generics.ListCreateAPIView):
     queryset = VolunteerApplication.objects.all()
     serializer_class = VolunteeringApplicationSerializer
@@ -89,7 +112,7 @@ class VolunteerHourAPIView(generics.ListCreateAPIView):
     serializer_class = VolunteerHourSerializer
 
 
-class ScheduleEmployeeAPIView(generics.CreateAPIView):
+class ScheduleEmployeeAPIView(generics.ListCreateAPIView):
     queryset = ScheduleEmployee.objects.all()
     serializer_class = ScheduleEmployeeSerializer
 
@@ -111,7 +134,7 @@ class DepartmentAPIView(generics.ListCreateAPIView):
 
 
 
-class DepartmentDetailsAPIView(generics.RetrieveAPIView):
+class DepartmentDetailsUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Departments.objects.all()
     serializer_class = DepartmentsSerializers
     lookup_field = "pk"

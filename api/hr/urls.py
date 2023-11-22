@@ -13,6 +13,12 @@ urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
+    #countries choices API
+    path('api/v1/countries/choices/', views.CountriesChoicesAPI.as_view(), name='country_choices'),
+    #job-titles
+    path('api/v1/hr/job-titles/', views.JobTitleAPIView.as_view(), name="hr-job-titles"),
+    path('api/v1/hr/job-titles/<int:pk>/', views.JobTitleDetailUpdateAPIView.as_view(), name="hr-job-title-detail"),
+    path('api/v1/hr/job-titles/destroy/<int:pk>/', views.JobTitleDestropAPI.as_view(), name="job-titles-destroy"),
 
     # Employees
     path('api/v1/hr/employees/', views.EmployeeListCreateAPIView.as_view(), name="hr-employees"),
@@ -21,8 +27,6 @@ urlpatterns = [
     path('api/v1/hr/employees-schedule/', views.ScheduleEmployeeAPIView.as_view(), name="hr-employees-schedule"),
 
     path('api/v1/hr/contractors/', views.ContractorAPIView.as_view(), name="hr-contractors"),
-    path('api/v1/hr/job-titles/', views.JobTitleAPIView.as_view(), name="hr-job-titles"),
-    path('api/v1/hr/job-titles/<int:pk>/', views.JobTitleDetailAPIView.as_view(), name="hr-job-title-detail"),
     # Volunteers
     path('api/v1/hr/volunteer/', views.VolunteerAPIView.as_view(), name="hr-volunteer"),
     path('api/v1/hr/volunteer/<int:pk>/', views.VolunteerRetrieveUpdateDeleteAPIView.as_view(), name="volunteer-retrieve-update-delete"),
@@ -34,6 +38,6 @@ urlpatterns = [
     path('api/v1/hr/emergency-contact/', views.LeaveRequestAPIView.as_view(), name="hr-emergency-contacts"),
     #Department
     path('api/v1/hr/departments/', views.DepartmentAPIView.as_view(), name="hr-departments"),
-    path('api/v1/hr/departments/<int:pk>/', views.DepartmentDetailsAPIView.as_view(), name="hr-department-detail"),
+    path('api/v1/hr/departments/<int:pk>/', views.DepartmentDetailsUpdateDestroyAPIView.as_view(), name="hr-department-detail"),
 
 ]

@@ -12,6 +12,20 @@ from users.serializers import UserPublicSerializer
 from model_serializers.department_serializer import DepartmentsPublicSerializer
 from model_serializers.volunteer_application_serializer import VolunteerApplicationPublicSerializer
 
+from django_countries.fields import CountryField
+
+
+
+class CountryChoiceSerializer(serializers.Serializer):
+    code = serializers.CharField(max_length=2)
+    name = serializers.CharField(max_length=128)
+
+    def to_representation(self, instance):
+        return {
+            'code': instance.code,
+            'name': instance.name
+        }
+
 
 class JobTitleSerializer(serializers.ModelSerializer):
     class Meta:
@@ -100,32 +114,33 @@ class VolunteeringApplicationSerializer(serializers.ModelSerializer):
 
     # skills = serializers.PrimaryKeyRelatedField(queryset=VolunteerSkill.objects.all(), required=False, many=True)
     # area_volunteering = serializers.PrimaryKeyRelatedField(queryset=VolunteeringArea.objects.all())
-
+    skills_name = serializers.StringRelatedField(many=True, source="skills")
+    area_voluntering_name = serializers.StringRelatedField(source="area_volunteering")
     class Meta:
         model=VolunteerApplication
         fields = [
-            "first_name", "last_name", "email", "phone_number",
-            "bio", "interests", "skills", "country_origin",
-            "language_spoken", "area_volunteering", "reason", "status"
+            "pk", "first_name", "last_name", "email", "phone_number",
+            "bio", "interests", "skills", "skills_name", "country_origin",
+            "language_spoken", "area_volunteering", "area_voluntering_name", "reason", "status"
         ]
 
 
 class VolunteerHourSerializer(serializers.ModelSerializer):
-
+    volunteer_name = serializers.StringRelatedField(many=False, source="volunteer")
     class Meta:
         model = VolunteerHour
         fields = [
-            "volunteer", "time_in", "time_out", "date", "location"
+            "volunteer", "volunteer_name", "time_in", "time_out", "date", "location"
         ]
 
 
 
 class ScheduleEmployeeSerializer(serializers.ModelSerializer):
-
+    employee_name = serializers.StringRelatedField(many=False, source="employee")
     class Meta:
         model = ScheduleEmployee
         fields = [
-            "employee", "start_time", "end_time", "home_office"
+            "pk", "employee", "employee_name", "start_time", "end_time", "home_office"
         ]
 
 
