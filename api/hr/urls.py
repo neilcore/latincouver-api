@@ -13,6 +13,9 @@ urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
+
+    path('home/', views.HomeView.as_view(), name ='home'),
+    path('logout/', views.LogoutView.as_view(), name ='logout'),
     #countries choices API
     path('api/v1/countries/choices/', views.CountriesChoicesAPI.as_view(), name='country_choices'),
     #job-titles

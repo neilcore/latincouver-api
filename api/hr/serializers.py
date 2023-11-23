@@ -77,6 +77,10 @@ class VolunteerSerializer(serializers.ModelSerializer):
     user_info = UserPublicSerializer(source="user", read_only=True)
     supervisor_name = serializers.StringRelatedField(source="supervisor", many=False)
     application_name = VolunteerApplicationPublicSerializer(source="application", read_only=True)
+    latitude = DecimalField(read_only=True,max_digits=9, decimal_places=6,)
+    longitude = DecimalField(read_only=True,max_digits=9, decimal_places=6,)
+
+
     class Meta:
         model=Volunteer
         fields = [

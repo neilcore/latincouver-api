@@ -182,6 +182,7 @@ class Volunteer(models.Model):
     def save(self, *args, **kwargs):
         geolocator = Nominatim(user_agent='hr-app')
         location = geolocator.geocode(str(self.country))
+        
         if location:
             self.latitude = location.latitude
             self.longitude = location.longitude
