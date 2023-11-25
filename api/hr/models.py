@@ -66,6 +66,7 @@ class AbstractModelHR(models.Model):
     work_type = models.IntegerField(choices=WorkType.choices, default=1)
     pay_method = models.IntegerField(choices=PayMethod.choices, default=1)
     salary = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    phone_number = models.CharField(max_length=20, blank=True, null=True)
     is_manager = models.BooleanField(default=False, verbose_name="Manager")
     start_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
