@@ -67,7 +67,7 @@ class ContractorSerializer(serializers.ModelSerializer):
     class Meta:
         model=Contractor
         fields=[
-            'user', 'department', 'title', 'bio', 'work_type', 'pay_method',
+            'pk', 'user', 'department', 'title', 'bio', 'work_type', 'pay_method',
             'salary', 'is_manager', 'start_date', 'end_date', 'notes',
             'contract'
         ]
@@ -134,7 +134,7 @@ class VolunteerHourSerializer(serializers.ModelSerializer):
     class Meta:
         model = VolunteerHour
         fields = [
-            "volunteer", "volunteer_name", "time_in", "time_out", "date", "location"
+            "pk", "volunteer", "volunteer_name", "time_in", "time_out", "date", "location"
         ]
 
 
@@ -149,17 +149,17 @@ class ScheduleEmployeeSerializer(serializers.ModelSerializer):
 
 
 class LeaveRequestSerializer(serializers.ModelSerializer):
-
+    employee_name = serializers.StringRelatedField(source="employee", many=False)
     class Meta:
         model = LeaveRequest
-        fields = "__all__"
+        fields = ['pk', 'employee', 'employee_name', 'start_date', 'end_date', 'leave_type', 'description']
 
 
 class EmergencyContactSerializers(serializers.ModelSerializer):
-
+    employee_name = serializers.StringRelatedField(source="employee", many=False)
     class Meta:
         model = EmergencyContact
-        fields = "__all__"
+        fields = ['pk', 'employee', 'employee_name', 'name', 'relationship', 'phone']
 
 
 class DepartmentsSerializers(serializers.ModelSerializer):

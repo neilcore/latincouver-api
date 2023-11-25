@@ -5,17 +5,17 @@ from .models import CustomUser
 
 class CustomUserAdmin(UserAdmin):
     model = CustomUser
-    list_display = ("username", "first_name", "last_name", "is_staff", "is_active",)
-    list_filter = ("username", "is_staff", "is_active",)
+    list_display = ("first_name", "last_name", "email", "is_staff", "is_active",)
+    list_filter = ("email", "is_staff", "is_active",)
     fieldsets = (
-        ("Personal Information", {"fields": ("username", "first_name", "last_name", "password")}),
+        ("Personal Information", {"fields": ("first_name", "last_name", "email", "password")}),
         ("Permissions", {"fields": ("is_staff", "is_active", "groups", "user_permissions")}),
     )
     add_fieldsets = (
         ("Personal Information", {
             "classes": ("wide",),
             "fields": (
-                "username", "first_name", "last_name", "password1", "password2"
+                "first_name", "last_name", "email", "password1", "password2"
             )}
         ),
         ("Permissions", {
@@ -25,8 +25,8 @@ class CustomUserAdmin(UserAdmin):
             )}
         ),
     )
-    search_fields = ("username", "last_name")
-    ordering = ("username",)
+    search_fields = ("first_name", "last_name", "email")
+    ordering = ("email",)
 
 
 admin.site.register(CustomUser, CustomUserAdmin)

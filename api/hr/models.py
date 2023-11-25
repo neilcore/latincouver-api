@@ -93,7 +93,7 @@ class Employee(
     def name(self):
         if self.user.first_name:
             return f'{self.user.first_name} {self.user.last_name}'
-        return f"{self.user.username}"
+        return f"{self.user.last_name}"
 
     def __str__(self):
         return f"{self.name}"
@@ -149,9 +149,9 @@ class VolunteerApplication(models.Model):
         PORTUGUESE = 3, 'Portuguese'
         OTHER = 4, 'Other'
 
-    first_name = models.CharField(max_length=100)
+    first_name = models.CharField(max_length=100, blank=True, null=True)
     last_name = models.CharField(max_length=100, blank=True, null=True)
-    email = models.EmailField(unique=True)
+    email = models.EmailField(unique=True, blank=True, null=True)
     phone_number = models.CharField(max_length=20, blank=True)
     bio = models.TextField(blank=True, null=True)
     interests = models.CharField(max_length=100, blank=True, null=True)

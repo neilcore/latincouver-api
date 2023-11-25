@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import (
     Employee, Contractor, JobTitle, VolunteerHour,
     Volunteer, VolunteerApplication, VolunteeringArea, VolunteerSkill,
-    ScheduleEmployee, Departments
+    ScheduleEmployee, Departments, LeaveRequest, EmergencyContact
 )
 
 
@@ -11,7 +11,7 @@ class CustomEmployeeAdmin(admin.ModelAdmin):
     list_display = ("employee_username", "employee_name", "is_manager", "start_date", "end_date")
 
     def employee_username(self, obj) -> str:
-        return f"{obj.user.username}"
+        return f"{obj.user.first_name}"
     
     def employee_name(self, obj) -> str:
         return f"{obj.user.first_name} {obj.user.last_name}"
@@ -47,6 +47,8 @@ class CustomScheduleEmployee(admin.ModelAdmin):
 
 admin.site.register(JobTitle)
 admin.site.register(Employee, CustomEmployeeAdmin)
+admin.site.register(LeaveRequest)
+admin.site.register(EmergencyContact)
 admin.site.register(Contractor)
 admin.site.register(Volunteer)
 admin.site.register(VolunteerApplication, CustomVolunterringApplication)

@@ -40,7 +40,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'rest_framework',
+    # 'rest_framework.authtoken',
+    # 'dj_rest_auth',
+    # 'dj_rest_auth.registration',
+    # 'allauth',
+    # 'allauth.account',
+    # 'allauth.socialaccount',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
@@ -56,6 +63,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'api.urls'
@@ -71,6 +79,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                # `allauth` needs this from django
+                # 'django.template.context_processors.request',
             ],
         },
     },
@@ -137,6 +147,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'users.CustomUser'
 
+ACCOUNT_USER_MODEL_USERNAME = None
+ACCOUNT_USERNAME_REQUIRED  = False
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+
 # Base url to serve media files
 MEDIA_URL = '/media/'
 
@@ -146,11 +161,16 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
+        # 'rest_framework.authentication.TokenAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
+    # 'DEFAULT_PERMISSION_CLASSES': [
+    #     'rest_framework.permissions.IsAuthenticated',
+    # ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 100
 }
+
 
 CORS_URLS_REGEX = r"^/api/.*"
 CORS_ALLOWED_ORIGINS = [
@@ -160,9 +180,30 @@ CORS_ALLOWED_ORIGINS = [
 
 
 SIMPLE_JWT  = {
-    # "AUTH_HEADER_TYPES": ["Bearer"],
-    "ACCESS_TOKEN_LIFETIME": datetime.timedelta(minutes=29),
+    "ACCESS_TOKEN_LIFETIME": datetime.timedelta(minutes=10),
     "REFRESH_TOKEN_LIFETIME": datetime.timedelta(days=1),
     "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_ROTATION": True
 }
+
+SITE_ID = 1
+
+# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+# EMAIL_HOST = "neilcore22@gmail.com"                    # smtp-relay.sendinblue.com
+# EMAIL_USE_TLS = False                               # False
+# EMAIL_PORT = "587"                    # 587
+# EMAIL_HOST_USER = "neilcore22@gmail.com"               # your email address
+# EMAIL_HOST_PASSWORD = "asylum61925wow"       # your password
+# DEFAULT_FROM_EMAIL = "neilcore22@gmail.com"    # email ending with @sendinblue.com
+
+
+# ACCOUNT_EMAIL_REQUIRED = True
+# ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+
+# # <EMAIL_CONFIRM_REDIRECT_BASE_URL>/<key>
+# EMAIL_CONFIRM_REDIRECT_BASE_URL = \
+#     "http://localhost:8000/email/confirm/"
+
+# # <PASSWORD_RESET_CONFIRM_REDIRECT_BASE_URL>/<uidb64>/<token>/
+# PASSWORD_RESET_CONFIRM_REDIRECT_BASE_URL = \
+#     "http://localhost:8000/password-reset/confirm/"

@@ -1,6 +1,9 @@
 Django==4.2.4
 psycopg2>=2.9.6
 djangorestframework>=3.14.0
+dj-rest-auth==5.0.1
+dj-rest-auth[with_social]==5.0.1
+django-allauth==0.55.0
 djangorestframework-simplejwt
 django-cors-headers==4.3.0
 Markdown==3.4.3
