@@ -19,5 +19,4 @@ urlpatterns = [
 
     # path("register/", RegisterView.as_view(), name="rest_register"),
     path('api/v1/users/', views.UsersAPIView.as_view(), name="users"),
-    path('api/v1/users/<int:pk>/', views.UserRetrieveUpdateDeleteAPIView.as_view(), name="user-detail"),
 ]

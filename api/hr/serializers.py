@@ -116,8 +116,6 @@ class VolunteeringAreaSerializer(serializers.ModelSerializer):
 
 class VolunteeringApplicationSerializer(serializers.ModelSerializer):
 
-    # skills = serializers.PrimaryKeyRelatedField(queryset=VolunteerSkill.objects.all(), required=False, many=True)
-    # area_volunteering = serializers.PrimaryKeyRelatedField(queryset=VolunteeringArea.objects.all())
     skills_name = serializers.StringRelatedField(many=True, source="skills")
     area_voluntering_name = serializers.StringRelatedField(source="area_volunteering")
     class Meta:
