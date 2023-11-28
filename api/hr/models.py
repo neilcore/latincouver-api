@@ -1,5 +1,9 @@
+from __future__ import absolute_import
+
+
 from django.db import models
 from django.conf import settings
+from django.db.models.query import QuerySet
 
 # country field
 from django_countries.fields import CountryField
@@ -10,6 +14,12 @@ from geopy.geocoders import Nominatim
 from django.utils.text import slugify
 
 from datetime import datetime
+
+# Managers
+from .managers.Employee import EmployeeManager
+from .managers.Volunteers import VolunteerManager
+from .managers.Contractors import ContractorManager
+from .managers.VolunteerApplication import VolunteerApplicationManager
 
 User = settings.AUTH_USER_MODEL
 
@@ -42,6 +52,12 @@ class JobTitle(models.Model):
     def __str__(self):
         return f"{self.name}"
     
+
+    def save(self, *args, **kwargs):
+        # Convert the name to lowercase before saving
+        self.name = self.name.lower()
+        super().save(*args, **kwargs)
+    
     class Meta:
         verbose_name_plural = "Job Titles"
 
@@ -52,6 +68,12 @@ class Departments(models.Model):
 
     def __str__(self) -> str:
         return self.name.upper() if self.name == "it" else self.name.title()
+    
+
+    def save(self, *args, **kwargs):
+        # Convert the name to lowercase before saving
+        self.name = self.name.lower()
+        super().save(*args, **kwargs)
     
 
     class Meta:
@@ -77,7 +99,7 @@ class AbstractModelHR(models.Model):
     class Meta:
         abstract = True
 
-
+    
 class Employee(
     AbstractModelHR
 ):
@@ -89,6 +111,8 @@ class Employee(
     allergies = models.CharField(max_length=200, blank=True, null=True)
     medical_condition = models.CharField(max_length=200, blank=True, null=True)
     photo = models.ImageField(upload_to='static/images/employees', default='default_pic.png')
+
+    objects = EmployeeManager()
 
     @property
     def name(self):
@@ -113,6 +137,8 @@ class Contractor(AbstractModelHR):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='contractor')
     department = models.ManyToManyField(Departments)
 
+    objects = ContractorManager()
+
     def __str__(self):
         return f"{self.user}"
     
@@ -135,6 +161,12 @@ class VolunteeringArea(models.Model):
 
     def __str__(self):
         return f'{self.name}'
+    
+
+    def save(self, *args, **kwargs):
+        # Convert the name to lowercase before saving
+        self.name = self.name.lower()
+        super().save(*args, **kwargs)
     
 
 class VolunteerApplication(models.Model):
@@ -164,11 +196,12 @@ class VolunteerApplication(models.Model):
     reason = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    objects = VolunteerApplicationManager()
     
     def __str__(self):
         return f'{self.first_name + " " + self.last_name}'
     
-
 
 class Volunteer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
@@ -179,6 +212,8 @@ class Volunteer(models.Model):
     latitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
     longitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
     photo = models.ImageField(upload_to='static/images/volunteers', default='default_pic.png')
+
+    objects = VolunteerManager()
 
     def save(self, *args, **kwargs):
         geolocator = Nominatim(user_agent='hr-app')

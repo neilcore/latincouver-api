@@ -37,38 +37,29 @@ class JobTitleSerializer(serializers.ModelSerializer):
 class EmployeeListCreateSerializer(serializers.ModelSerializer):
 
     user_info = UserPublicSerializer(source="user", read_only=True)
+    active_status = serializers.StringRelatedField(source="user.is_active", read_only=True)
     department_names = serializers.StringRelatedField(source="department", many=True, read_only=True)
     role = serializers.StringRelatedField(source="title", many=False, read_only=True)
 
     class Meta:
         model=Employee
         fields = [
-            'pk', 'user', 'user_info', 'department', 'department_names', 'title', 'role', 'bio', 'work_type', 'pay_method',
-            'salary', 'is_manager', 'start_date', 'end_date', 'notes',
+            'pk', 'user', 'user_info', 'active_status', 'department', 'department_names', 'title', 'role', 'bio', 'work_type', 'pay_method',
+            'salary', 'is_manager', 'start_date', 'end_date', 'notes', 'phone_number',
             'contract', 'gender', 'allergies', 'medical_condition', 'photo'
         ]
 
-# class EmployeeViewSerializer(serializers.ModelSerializer):
-#     user = serializers.StringRelatedField(many=False)
-#     department = serializers.StringRelatedField(many=True)
-#     # title = serializers.StringRelatedField(many=False)
-#     title = serializers.PrimaryKeyRelatedField(many=False, read_only=True)
-
-#     class Meta:
-#         model=Employee
-#         fields = [
-#             'pk', 'user', 'department', 'title', 'bio', 'work_type', 'pay_method',
-#             'salary', 'is_manager', 'start_date', 'end_date', 'notes',
-#             'contract', 'gender', 'allergies', 'medical_condition', 'photo'
-#         ]
-
 
 class ContractorSerializer(serializers.ModelSerializer):
+    user_info = UserPublicSerializer(source="user", read_only=True)
+    active_status = serializers.StringRelatedField(source="user.is_active", read_only=True)
+    department_names = serializers.StringRelatedField(source="department", many=True, read_only=True)
+    role = serializers.StringRelatedField(source="title", many=False, read_only=True)
     class Meta:
         model=Contractor
         fields=[
-            'pk', 'user', 'department', 'title', 'bio', 'work_type', 'pay_method',
-            'salary', 'is_manager', 'start_date', 'end_date', 'notes',
+            'pk', 'user', 'user_info', 'department', 'department_names', 'title', 'role', 'bio', 'work_type', 'pay_method',
+            'salary', 'is_manager', 'start_date', 'end_date', 'notes', 'active_status', 'phone_number',
             'contract'
         ]
 

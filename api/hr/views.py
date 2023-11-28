@@ -85,10 +85,70 @@ class JobTitleDestropAPI(generics.DestroyAPIView):
     lookup_field = "pk"
 
 
+# list and create
 class ContractorAPIView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Contractor.objects.all()
     serializer_class = ContractorSerializer
+
+
+    def get_queryset(self, *args, **kwargs):
+        qs = super().get_queryset(*args, **kwargs)
+        queries = {}
+
+        if self.request.GET.get("is_active"):
+            queries['is_active'] = True if self.request.GET.get("is_active").lower() == "true" else False
+
+        if self.request.GET.get("first_name"):
+            queries['first_name'] = self.request.GET.get("first_name")
+
+        if self.request.GET.get("last_name"):
+            queries['last_name'] = self.request.GET.get("last_name")
+
+        if self.request.GET.get("user_email"):
+            queries['user_email'] = self.request.GET.get("user_email")
+
+        if self.request.GET.get("title"):
+            queries['title'] = self.request.GET.get("title")
+
+
+        if self.request.GET.get("work_type"):
+            queries['work_type'] = self.request.GET.get("work_type")
+
+
+        if self.request.GET.get("phone_number"):
+            queries['phone_number'] = self.request.GET.get("phone_number").lower()
+
+        if self.request.GET.get("pay_method"):
+            queries['pay_method'] = self.request.GET.get("pay_method")
+
+        if self.request.GET.get("salary"):
+            queries['salary'] = self.request.GET.get("salary")
+
+        if self.request.GET.get("is_manager"):
+            queries['is_manager'] = True if self.request.GET.get("is_manager").lower() == "true" else False
+
+        if self.request.GET.get("gender"):
+            queries['gender'] = 1 if self.request.GET.get("gender") == "1" or self.request.GET.get("gender").lower() == "male" else 2 if self.request.GET.get("gender") == "2" or self.request.GET.get("gender").lower() == "female" else 3
+
+        if self.request.GET.get("department"):
+            lendict = len(self.request.GET.get("department"))
+            if lendict > 1:
+                queries['department'] = self.request.GET.get("department").split(",")
+            else:
+                queries['department'] = self.request.GET.get("department").split()
+
+        if queries:
+            return qs.search(queries)
+        return qs
+    
+
+# retrieve | update | delete
+class ContractorRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    queryset = Contractor.objects.all()
+    serializer_class = ContractorSerializer
+    lookup_field = "pk"
 
 
 # list and create
@@ -97,6 +157,64 @@ class EmployeeListCreateAPIView(generics.ListCreateAPIView):
 
     queryset = Employee.objects.all()
     serializer_class = EmployeeListCreateSerializer
+
+    def get_queryset(self, *args, **kwargs):
+        qs = super().get_queryset(*args, **kwargs)
+        queries = {}
+
+        if self.request.GET.get("is_active"):
+            queries['is_active'] = True if self.request.GET.get("is_active").lower() == "true" else False
+
+        if self.request.GET.get("first_name"):
+            queries['first_name'] = self.request.GET.get("first_name")
+
+        if self.request.GET.get("last_name"):
+            queries['last_name'] = self.request.GET.get("last_name")
+
+        if self.request.GET.get("user_email"):
+            queries['user_email'] = self.request.GET.get("user_email")
+
+        if self.request.GET.get("phone_number"):
+            queries['phone_number'] = self.request.GET.get("phone_number").lower()
+
+        if self.request.GET.get("title"):
+            queries['title'] = self.request.GET.get("title")
+
+        if self.request.GET.get("allergies"):
+            queries['allergies'] = self.request.GET.get("allergies")
+
+        if self.request.GET.get("medical_condition"):
+            queries['medical_condition'] = self.request.GET.get("medical_condition")
+
+
+        if self.request.GET.get("title"):
+            queries['title'] = self.request.GET.get("title")
+
+        if self.request.GET.get("work_type"):
+            queries['work_type'] = self.request.GET.get("work_type")
+
+        if self.request.GET.get("pay_method"):
+            queries['pay_method'] = self.request.GET.get("pay_method")
+
+        if self.request.GET.get("salary"):
+            queries['salary'] = self.request.GET.get("salary")
+
+        if self.request.GET.get("is_manager"):
+            queries['is_manager'] = True if self.request.GET.get("is_manager").lower() == "true" else False
+
+        if self.request.GET.get("gender"):
+            queries['gender'] = 1 if self.request.GET.get("gender") == "1" or self.request.GET.get("gender").lower() == "male" else 2 if self.request.GET.get("gender") == "2" or self.request.GET.get("gender").lower() == "female" else 3
+
+        if self.request.GET.get("department"):
+            lendict = len(self.request.GET.get("department"))
+            if lendict > 1:
+                queries['department'] = self.request.GET.get("department").split(",")
+            else:
+                queries['department'] = self.request.GET.get("department").split()
+        
+        if queries:
+            return qs.search(queries)
+        return qs
 
 
 
@@ -116,6 +234,44 @@ class VolunteerAPIView(generics.ListCreateAPIView):
 
     queryset = Volunteer.objects.all()
     serializer_class = VolunteerSerializer
+
+
+    def get_queryset(self, *args, **kwargs):
+        qs = super().get_queryset(*args, **kwargs)
+        queries = {}
+
+        if self.request.GET.get("is_active"):
+            queries['is_active'] = True if self.request.GET.get("is_active").lower() == "true" else False
+
+        if self.request.GET.get("first_name"):
+            queries['first_name'] = self.request.GET.get("first_name")
+
+        if self.request.GET.get("last_name"):
+            queries['last_name'] = self.request.GET.get("last_name")
+
+        if self.request.GET.get("user_email"):
+            queries['user_email'] = self.request.GET.get("user_email")
+
+
+        if self.request.GET.get("country"):
+            queries['country'] = self.request.GET.get("country").upper()
+
+
+        if self.request.GET.get("application_first_name"):
+            queries['application_first_name'] = self.request.GET.get("application_first_name")
+
+        if self.request.GET.get("application_last_name"):
+            queries['application_last_name'] = self.request.GET.get("application_last_name")
+
+        if self.request.GET.get("application_email"):
+            queries['application_email'] = self.request.GET.get("application_email")
+
+        if self.request.GET.get("gender"):
+            queries['gender'] = 1 if self.request.GET.get("gender") == "1" or self.request.GET.get("gender").lower() == "male" else 2 if self.request.GET.get("gender") == "2" or self.request.GET.get("gender").lower() == "female" else 3
+
+        if queries:
+            return qs.search(queries)
+        return qs
 
 
 # retrieve | update | delete
@@ -161,6 +317,60 @@ class VolunteeringApplicationAPIView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = VolunteerApplication.objects.all()
     serializer_class = VolunteeringApplicationSerializer
+
+
+    def get_queryset(self, *args, **kwargs):
+        qs = super().get_queryset(*args, **kwargs)
+        queries = {}
+
+
+        if self.request.GET.get("first_name"):
+            queries['first_name'] = self.request.GET.get("first_name")
+
+        if self.request.GET.get("last_name"):
+            queries['last_name'] = self.request.GET.get("last_name")
+
+        if self.request.GET.get("email"):
+            queries['email'] = self.request.GET.get("email")
+
+
+        if self.request.GET.get("phone_number"):
+            queries['phone_number'] = self.request.GET.get("phone_number").lower()
+
+        if self.request.GET.get("interests"):
+            queries['interests'] = self.request.GET.get("interests")
+
+        if self.request.GET.get("skills"):
+            lendict = len(self.request.GET.get("skills"))
+            if lendict > 1:
+                queries['skills'] = self.request.GET.get("skills").split(",")
+            else:
+                queries['skills'] = self.request.GET.get("skills").split()
+
+        if self.request.GET.get("country_origin"):
+            queries['country_origin'] = self.request.GET.get("country_origin")
+
+        if self.request.GET.get("language_spoken"):
+            if self.request.GET.get("language_spoken") == "1" or self.request.GET.get("language_spoken").lower() == "english":
+                queries['language_spoken'] = 1
+            elif self.request.GET.get("language_spoken") == "2" or self.request.GET.get("language_spoken").lower() == "spanish":
+                queries['language_spoken'] = 2
+            elif self.request.GET.get("language_spoken") == "3" or self.request.GET.get("language_spoken").lower() == "portuguese":
+                queries['language_spoken'] = 3
+            else:
+                queries['language_spoken'] = 4
+
+
+        if self.request.GET.get("area_volunteering"):
+            queries['area_volunteering'] = self.request.GET.get("area_volunteering")
+
+        if self.request.GET.get("status"):
+            queries['status'] = self.request.GET.get("status").title()
+
+        if queries:
+            return qs.search(queries)
+        return qs
+
 
 
 # retireive | update |delete

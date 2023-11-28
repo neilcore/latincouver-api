@@ -20,6 +20,7 @@ urlpatterns = [
     path('api/v1/hr/employees-schedule/<int:pk>/', views.ScheduleEmployeeRetrieveUpdateDeleteAPIView.as_view(), name="hr-employees-schedule-retrieve-update-delete"),
 
     path('api/v1/hr/contractors/', views.ContractorAPIView.as_view(), name="hr-contractors"),
+    path('api/v1/hr/contractors/<int:pk>/', views.ContractorRetrieveUpdateDeleteAPIView.as_view(), name="hr-contractors-retrieve-update-delete"),
     # Volunteers
     path('api/v1/hr/volunteer/', views.VolunteerAPIView.as_view(), name="hr-volunteer"),
     path('api/v1/hr/volunteer/<int:pk>/', views.VolunteerRetrieveUpdateDeleteAPIView.as_view(), name="volunteer-retrieve-update-delete"),

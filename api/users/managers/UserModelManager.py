@@ -1,5 +1,26 @@
 from django.contrib.auth.base_user import BaseUserManager
 from django.utils.translation import gettext_lazy as _
+from django.db import models
+
+class CustomUserQuerySet(models.QuerySet):
+
+    def search(self, queries, user=None):
+
+        first_name = queries.pop("first_name", None)
+        last_name = queries.pop("last_name", None)
+
+        new_query = dict(queries)
+
+        if first_name is not None:
+            new_query.update({"first_name__icontains": first_name})
+
+        if last_name is not None:
+            new_query.update({"last_name__icontains": last_name})
+
+
+        print(new_query)
+        return self.filter(**new_query)
+    
 
 
 class CustomUserManager(BaseUserManager):
@@ -41,3 +62,7 @@ class CustomUserManager(BaseUserManager):
             email, first_name, last_name, password,
             **extra_fields
         )
+    
+
+    def get_queryset(self, *args, **kwaargs):
+        return CustomUserQuerySet(self.model, using=self._db)
