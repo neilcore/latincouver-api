@@ -107,7 +107,7 @@ class VolunteeringAreaSerializer(serializers.ModelSerializer):
 
 class VolunteeringApplicationSerializer(serializers.ModelSerializer):
 
-    skills_name = serializers.StringRelatedField(many=True, source="skills")
+    skills_name = serializers.StringRelatedField(many=True, source="skills", read_only=True)
     area_voluntering_name = serializers.StringRelatedField(source="area_volunteering")
     class Meta:
         model=VolunteerApplication
@@ -120,10 +120,11 @@ class VolunteeringApplicationSerializer(serializers.ModelSerializer):
 
 class VolunteerHourSerializer(serializers.ModelSerializer):
     volunteer_name = serializers.StringRelatedField(many=False, source="volunteer")
+    hours_worked = DecimalField(read_only=True, max_digits=5, decimal_places=2)
     class Meta:
         model = VolunteerHour
         fields = [
-            "pk", "volunteer", "volunteer_name", "time_in", "time_out", "date", "location"
+            "pk", "volunteer", "volunteer_name", "time_in", "time_out", "hours_worked", "date", "location"
         ]
 
 

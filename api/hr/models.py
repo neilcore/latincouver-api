@@ -230,7 +230,6 @@ class Volunteer(models.Model):
 
 
 # TIMESHEETS
-
 class VolunteerHour(models.Model):
     class LocationChoices(models.IntegerChoices):
         RM = 1, 'Remote'
@@ -242,7 +241,7 @@ class VolunteerHour(models.Model):
     time_in = models.TimeField(default=datetime.now().strftime('%H:%M:%S'))
     time_out = models.TimeField(default=datetime.now().strftime('%H:%M:%S'))
     hours_worked = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
-    location = models.IntegerField(choices=LocationChoices.choices, default='2')    
+    location = models.IntegerField(choices=LocationChoices.choices, default=2)    
 
     def save(self, *args, **kwargs):
 
@@ -287,9 +286,6 @@ class ScheduleEmployee(models.Model):
     def __str__(self):
         return f"{self.get_day_of_week_display()} - {self.employee}"
 
-
-
-
 #  Leave Requests
 
 class LeaveRequest(models.Model):
@@ -310,10 +306,6 @@ class LeaveRequest(models.Model):
 
     def __str__(self):
         return f"{self.employee.user.first_name} {self.employee.user.last_name} - {self.start_date} to {self.end_date} ({self.leave_type})"
-
-
-
-
 
 class EmergencyContact(models.Model):
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name="employee_emergency_contact_fk")

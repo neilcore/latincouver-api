@@ -8,6 +8,8 @@ from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnl
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import status
 
+from django.db import transaction
+
 
 
 # Serializers
@@ -24,7 +26,6 @@ from .serializers import (
     LeaveRequestSerializer,
     EmergencyContactSerializers,
     DepartmentsSerializers,
-    CountryChoiceSerializer
 
 )
 
@@ -32,13 +33,12 @@ from .serializers import (
 from .models import (
     JobTitle, Employee, Contractor, Volunteer, VolunteerSkill, VolunteeringArea,
     VolunteerApplication, VolunteerHour, ScheduleEmployee, LeaveRequest,
-    EmergencyContact, Departments, GenderChoices
+    EmergencyContact, Departments
 )
 
 
+@transaction.non_atomic_requests
 class HomeView(APIView):
-     
-   permission_classes = (IsAuthenticated, )
    def get(self, request):
        content = {"message": "welcome to latincouver"}
        return Response(content)
@@ -69,6 +69,14 @@ class JobTitleAPIView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = JobTitle.objects.all()
     serializer_class = JobTitleSerializer
+
+
+    def perform_create(self, serializer):
+
+        import time
+        time.sleep(50)
+
+        serializer.save()
 
 # retrieve and update
 class JobTitleDetailUpdateAPIView(generics.RetrieveUpdateAPIView):
@@ -150,6 +158,13 @@ class ContractorRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIVie
     serializer_class = ContractorSerializer
     lookup_field = "pk"
 
+    def get_object(self):
+        obj = self.get_queryset().select_for_update().get(pk=self.kwargs[self.lookup_field])
+
+        if obj is None:
+            self.not_found()
+        return obj
+
 
 # list and create
 class EmployeeListCreateAPIView(generics.ListCreateAPIView):
@@ -225,6 +240,12 @@ class EmployeeRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView)
     serializer_class = EmployeeListCreateSerializer
     lookup_field = "pk"
 
+    def get_object(self):
+        obj = self.get_queryset().select_for_update().get(pk=self.kwargs[self.lookup_field])
+
+        if obj is None:
+            self.not_found()
+        return obj
 
 
 # Volunteers
@@ -274,12 +295,20 @@ class VolunteerAPIView(generics.ListCreateAPIView):
         return qs
 
 
-# retrieve | update | delete
+#retrieve | update | delete
 class VolunteerRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Volunteer.objects.all()
     serializer_class = VolunteerSerializer
     lookup_field = "pk"
+
+    def get_object(self):
+        obj = self.get_queryset().select_for_update().get(pk=self.kwargs[self.lookup_field])
+
+        if obj is None:
+            self.not_found()
+        return obj
+
 
 
 # list and create
@@ -295,6 +324,12 @@ class VolunteerSkillsRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyA
     serializer_class = VolunteerSkillsSerializer
     lookup_field = "pk"
 
+    def get_object(self):
+        obj = self.get_queryset().select_for_update().get(pk=self.kwargs[self.lookup_field])
+        if obj is None:
+            self.not_found()
+        return obj
+
 
 # list and create
 class VolunteeringAreaAPIView(generics.ListCreateAPIView):
@@ -308,8 +343,14 @@ class VolunteeringAreaRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroy
     permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = VolunteeringArea.objects.all()
     serializer_class = VolunteeringAreaSerializer
-
     lookup_field = "pk"
+
+    def get_object(self):
+        obj = self.get_queryset().select_for_update().get(pk=self.kwargs[self.lookup_field])
+
+        if obj is None:
+            self.not_found()
+        return obj
 
 
 # list and create
@@ -378,8 +419,14 @@ class VolunteeringApplicationRetrieveUpdateDeleteAPIView(generics.RetrieveUpdate
     permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = VolunteerApplication.objects.all()
     serializer_class = VolunteeringApplicationSerializer
-
     lookup_field = "pk"
+
+    def get_object(self):
+        obj = self.get_queryset().select_for_update().get(pk=self.kwargs[self.lookup_field])
+
+        if obj is None:
+            self.not_found()
+        return obj
 
 # list | create
 class VolunteerHourAPIView(generics.ListCreateAPIView):

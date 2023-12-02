@@ -40,7 +40,6 @@ class ContractorsQuerySet(models.QuerySet):
             new_query.update({"user__last_name__icontains": last_name})
 
         if email is not None:
-            print("hahahaha")
             new_query.update({"user__email": email})
 
         if is_active is not None:
