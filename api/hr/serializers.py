@@ -4,7 +4,7 @@ from rest_framework.fields import CharField, DecimalField, EmailField, DateTimeF
 
 from .models import (
     Employee, Contractor, JobTitle, Volunteer, VolunteerSkill, VolunteeringArea,
-    VolunteerApplication, VolunteerHour, ScheduleEmployee, LeaveRequest, EmergencyContact, Departments, WorkType
+    VolunteerApplication, VolunteerHour, ScheduleEmployee, LeaveRequest, EmergencyContact, Departments, VacationSetup
     )
 
 from users.serializers import UserPublicSerializer
@@ -142,6 +142,13 @@ class LeaveRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = LeaveRequest
         fields = ['pk', 'employee', 'employee_name', 'start_date', 'end_date', 'leave_type', 'description']
+
+
+class VacationSetupSerializer(serializers.ModelSerializer):
+    employee_name = serializers.StringRelatedField(source="employee", many=False)
+    class Meta:
+        model = VacationSetup
+        fields = ['pk', 'employee', 'employee_name', 'year', 'weeks_of_vacation', 'percentage_salary', 'plan']
 
 
 class EmergencyContactSerializers(serializers.ModelSerializer):

@@ -35,6 +35,10 @@ urlpatterns = [
     #leave requests
     path('api/v1/hr/leave-request/', views.LeaveRequestAPIView.as_view(), name="hr-leave-requests"),
     path('api/v1/hr/leave-request/<int:pk>/', views.LeaveRequestRetrieveUpdateDeleteAPIView.as_view(), name='hr-leave-requests-retrieve-update-delete'),
+
+    #Vacation Setup
+    path('api/v1/hr/vacation-setup/', views.VacationSetupAPIView.as_view(), name="hr-vacation-setup"),
+    path('api/v1/hr/vacation-setup/<int:pk>/', views.VacationSetupRetrieveUpdateDeleteAPIView.as_view(), name='hr-vacation-setup--retrieve-update-delete'),
     #Emergency Contact
     path('api/v1/hr/emergency-contact/', views.EmergencyContactAPIView.as_view(), name="hr-emergency-contacts"),
     path('api/v1/hr/emergency-contact/<int:pk>/', views.EmergencyContactRetrieveUpdateDeleteAPIView.as_view(), name='hr-emergency-contact-retrieve-update-delete'),

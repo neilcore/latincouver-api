@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import (
     Employee, Contractor, JobTitle, VolunteerHour,
     Volunteer, VolunteerApplication, VolunteeringArea, VolunteerSkill,
-    ScheduleEmployee, Departments, LeaveRequest, EmergencyContact
+    ScheduleEmployee, Departments, LeaveRequest, EmergencyContact, VacationSetup
 )
 
 
@@ -48,6 +48,7 @@ class CustomScheduleEmployee(admin.ModelAdmin):
 admin.site.register(JobTitle)
 admin.site.register(Employee, CustomEmployeeAdmin)
 admin.site.register(LeaveRequest)
+admin.site.register(VacationSetup)
 admin.site.register(EmergencyContact)
 admin.site.register(Contractor)
 admin.site.register(Volunteer)

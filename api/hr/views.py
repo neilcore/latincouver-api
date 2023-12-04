@@ -26,6 +26,7 @@ from .serializers import (
     LeaveRequestSerializer,
     EmergencyContactSerializers,
     DepartmentsSerializers,
+    VacationSetupSerializer
 
 )
 
@@ -33,7 +34,7 @@ from .serializers import (
 from .models import (
     JobTitle, Employee, Contractor, Volunteer, VolunteerSkill, VolunteeringArea,
     VolunteerApplication, VolunteerHour, ScheduleEmployee, LeaveRequest,
-    EmergencyContact, Departments
+    EmergencyContact, Departments, VacationSetup
 )
 
 
@@ -451,6 +452,7 @@ class ScheduleEmployeeRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroy
 
 # list | create
 class LeaveRequestAPIView(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = LeaveRequest.objects.all()
     serializer_class = LeaveRequestSerializer
 
@@ -464,11 +466,13 @@ class LeaveRequestRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIV
 
 # list | create
 class EmergencyContactAPIView(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = EmergencyContact.objects.all()
     serializer_class = EmergencyContactSerializers
 
 # retireve | update | delete
 class EmergencyContactRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = EmergencyContact.objects.all()
     serializer_class = EmergencyContactSerializers
     lookup_field = "pk"
@@ -489,4 +493,20 @@ class DepartmentDetailsUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIVie
 
     queryset = Departments.objects.all()
     serializer_class = DepartmentsSerializers
+    lookup_field = "pk"
+
+
+
+# list | create
+class VacationSetupAPIView(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = VacationSetup.objects.all()
+    serializer_class = VacationSetupSerializer
+
+
+# retireve | update | delete
+class VacationSetupRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    queryset = VacationSetup.objects.all()
+    serializer_class = VacationSetupSerializer
     lookup_field = "pk"

@@ -306,6 +306,20 @@ class LeaveRequest(models.Model):
 
     def __str__(self):
         return f"{self.employee.user.first_name} {self.employee.user.last_name} - {self.start_date} to {self.end_date} ({self.leave_type})"
+    
+
+
+class VacationSetup(models.Model):
+    year = models.PositiveSmallIntegerField(default=datetime.now().year)
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    weeks_of_vacation = models.PositiveSmallIntegerField(default=2)
+    percentage_salary = models.DecimalField(max_digits=5, decimal_places=2, default=2.0)
+    plan = models.PositiveSmallIntegerField(default=0)
+
+    def __str__(self):
+        return f"{self.year}__{self.employee}"
+    
+
 
 class EmergencyContact(models.Model):
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name="employee_emergency_contact_fk")
