@@ -70,14 +70,6 @@ class JobTitleAPIView(generics.ListCreateAPIView):
     queryset = JobTitle.objects.all()
     serializer_class = JobTitleSerializer
 
-
-    def perform_create(self, serializer):
-
-        import time
-        time.sleep(50)
-
-        serializer.save()
-
 # retrieve and update
 class JobTitleDetailUpdateAPIView(generics.RetrieveUpdateAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]

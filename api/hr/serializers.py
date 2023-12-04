@@ -71,7 +71,6 @@ class VolunteerSerializer(serializers.ModelSerializer):
     latitude = DecimalField(read_only=True,max_digits=9, decimal_places=6,)
     longitude = DecimalField(read_only=True,max_digits=9, decimal_places=6,)
 
-
     class Meta:
         model=Volunteer
         fields = [
