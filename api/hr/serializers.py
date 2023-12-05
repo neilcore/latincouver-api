@@ -133,7 +133,7 @@ class ScheduleEmployeeSerializer(serializers.ModelSerializer):
     class Meta:
         model = ScheduleEmployee
         fields = [
-            "pk", "employee", "employee_name", "start_time", "end_time", "home_office"
+            "pk", "employee", "employee_name", "start_time", "end_time", "home_office", "day_of_week"
         ]
 
 

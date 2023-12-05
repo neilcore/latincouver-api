@@ -162,7 +162,6 @@ class ContractorRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIVie
 # list and create
 class EmployeeListCreateAPIView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
-
     queryset = Employee.objects.all()
     serializer_class = EmployeeListCreateSerializer
 
