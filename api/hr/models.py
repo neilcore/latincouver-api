@@ -26,6 +26,8 @@ User = settings.AUTH_USER_MODEL
 class Status(models.IntegerChoices):
     AC = 1, 'Active'
     AR = 2, 'Archived'
+    FR = 3, 'Former'
+    DLT = 4, 'Delete'
 
 class WorkType(models.IntegerChoices):
     FT = 1, 'Full Time'
@@ -95,6 +97,7 @@ class AbstractModelHR(models.Model):
     notes = models.CharField(max_length=250, blank=True, null=True)
     contract = models.URLField(blank=True, null=True)
     slug = models.SlugField(unique=True, blank=True, null=True)
+    status = models.IntegerField(choices=Status.choices, default=1)
 
     class Meta:
         abstract = True
@@ -212,7 +215,7 @@ class Volunteer(models.Model):
     latitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
     longitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
     photo = models.ImageField(upload_to='static/images/volunteers', default='default_pic.png')
-
+    status = models.IntegerField(choices=Status.choices, default=1)
     objects = VolunteerManager()
 
     def save(self, *args, **kwargs):

@@ -60,7 +60,7 @@ class ContractorSerializer(serializers.ModelSerializer):
         fields=[
             'pk', 'user', 'user_info', 'department', 'department_names', 'title', 'role', 'bio', 'work_type', 'pay_method',
             'salary', 'is_manager', 'start_date', 'end_date', 'notes', 'active_status', 'phone_number',
-            'contract'
+            'contract', 'status'
         ]
 
 
@@ -74,22 +74,10 @@ class VolunteerSerializer(serializers.ModelSerializer):
     class Meta:
         model=Volunteer
         fields = [
-            "pk", "user", "user_info", "gender", "application", "application_name", "supervisor", "supervisor_name", "country", "photo", "latitude", "longitude"
+            "pk", "user", "user_info", "gender", "application", "application_name", "supervisor", "supervisor_name", "country", "photo", "latitude", "longitude",
+            "status"
         ]
 
-
-
-# Volunteer Create and Update
-class VolunteerCreateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model=Volunteer
-        fields = [
-            "pk", "user", "gender", "application", "supervisor", "country", "photo", "latitude", "longitude"
-        ]
-
-
-
-        
 
 class VolunteerSkillsSerializer(serializers.ModelSerializer):
     class Meta:

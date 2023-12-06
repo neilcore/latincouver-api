@@ -8,12 +8,17 @@ from .models import (
 
 class CustomEmployeeAdmin(admin.ModelAdmin):
     model = Employee
-    list_display = ("employee_username", "employee_name", "is_manager", "start_date", "end_date")
-
-    def employee_username(self, obj) -> str:
-        return f"{obj.user.first_name}"
+    list_display = ("employee_name", "work_type", "is_manager", "start_date", "end_date", "status")
     
     def employee_name(self, obj) -> str:
+        return f"{obj.user.first_name} {obj.user.last_name}"
+    
+
+class CustomVolunteerAdmin(admin.ModelAdmin):
+    model = Volunteer
+    list_display = ("volunteer_name", "application", "supervisor", "country", "status")
+    
+    def volunteer_name(self, obj) -> str:
         return f"{obj.user.first_name} {obj.user.last_name}"
     
 
@@ -44,14 +49,21 @@ class CustomScheduleEmployee(admin.ModelAdmin):
         return f"{obj.employee.user.first_name} {obj.employee.user.last_name}"
     
 
+class CustomContractorAdmin(admin.ModelAdmin):
+    model = Contractor
+    list_display = ("contractor_name", "work_type", "is_manager", "start_date", "end_date", "status")
+    
+    def contractor_name(self, obj) -> str:
+        return f"{obj.user.first_name} {obj.user.last_name}"
+    
 
 admin.site.register(JobTitle)
 admin.site.register(Employee, CustomEmployeeAdmin)
 admin.site.register(LeaveRequest)
 admin.site.register(VacationSetup)
 admin.site.register(EmergencyContact)
-admin.site.register(Contractor)
-admin.site.register(Volunteer)
+admin.site.register(Contractor, CustomContractorAdmin)
+admin.site.register(Volunteer, CustomVolunteerAdmin)
 admin.site.register(VolunteerApplication, CustomVolunterringApplication)
 admin.site.register(VolunteeringArea)
 admin.site.register(VolunteerSkill)
