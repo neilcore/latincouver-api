@@ -55,11 +55,35 @@ class CustomContractorAdmin(admin.ModelAdmin):
     
     def contractor_name(self, obj) -> str:
         return f"{obj.user.first_name} {obj.user.last_name}"
+
+
+
+class CustomLeaveRequestAdmin(admin.ModelAdmin):
+    model = LeaveRequest
+    list_display = ("employee_name", "leave_type", "start_date", "end_date", "approved", "approved_by")
+    
+    def employee_name(self, obj) -> str:
+        return f"{obj.employee.user.first_name} {obj.employee.user.last_name}"
+    
+    list_filter = ("leave_type", "approved",)
+
+    fieldsets = (
+        ('Fill Leave Request Form', {"fields": (
+            "employee", "leave_type", "description",
+        )}),
+        ('Duration', {"fields": (
+            "start_date", "end_date"
+        )}),
+        ('Status', {"fields": (
+            "approved", "approved_by"
+        )}),
+    )
+    readonly_fields = ('approved_by',)
     
 
 admin.site.register(JobTitle)
 admin.site.register(Employee, CustomEmployeeAdmin)
-admin.site.register(LeaveRequest)
+admin.site.register(LeaveRequest, CustomLeaveRequestAdmin)
 admin.site.register(VacationSetup)
 admin.site.register(EmergencyContact)
 admin.site.register(Contractor, CustomContractorAdmin)

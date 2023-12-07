@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from rest_framework.fields import CharField, DecimalField, EmailField, DateTimeField, IntegerField
+from rest_framework.fields import CharField, DecimalField, EmailField, DateTimeField, IntegerField, BooleanField
 
 from .models import (
     Employee, Contractor, JobTitle, Volunteer, VolunteerSkill, VolunteeringArea,
@@ -11,8 +11,6 @@ from users.serializers import UserPublicSerializer
 
 from model_serializers.department_serializer import DepartmentsPublicSerializer
 from model_serializers.volunteer_application_serializer import VolunteerApplicationPublicSerializer
-
-from django_countries.fields import CountryField
 
 
 
@@ -124,12 +122,22 @@ class ScheduleEmployeeSerializer(serializers.ModelSerializer):
             "pk", "employee", "employee_name", "start_time", "end_time", "home_office", "day_of_week"
         ]
 
-
+# maybe we can only use this for employees
 class LeaveRequestSerializer(serializers.ModelSerializer):
     employee_name = serializers.StringRelatedField(source="employee", many=False)
+    approved_by_name = serializers.StringRelatedField(source="approved_by", many=False)
+    approved = BooleanField(read_only=True)
     class Meta:
         model = LeaveRequest
-        fields = ['pk', 'employee', 'employee_name', 'start_date', 'end_date', 'leave_type', 'description']
+        fields = ['pk', 'employee', 'employee_name', 'start_date', 'end_date', 'leave_type', 'description', 'approved', 'approved_by_name']
+
+# this is Leave Request intended for Admins | Superusers | Power Users
+class LeaveRequestAdminPowerSerializer(serializers.ModelSerializer):
+    employee_name = serializers.StringRelatedField(source="employee", many=False)
+    approved_by_name = serializers.StringRelatedField(source="approved_by", many=False, read_only=True)
+    class Meta:
+        model = LeaveRequest
+        fields = ['pk', 'employee', 'employee_name', 'start_date', 'end_date', 'leave_type', 'description', 'approved', 'approved', 'approved_by_name']
 
 
 class VacationSetupSerializer(serializers.ModelSerializer):

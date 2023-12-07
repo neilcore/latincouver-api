@@ -4,9 +4,9 @@ services:
   db:
     image: postgres:15.3-bullseye
     environment:
-      POSTGRES_PASSWORD: latincouver2023
-      POSTGRES_USER: latincouver
-      POSTGRES_DB: latincouver
+      - POSTGRES_PASSWORD=latincouver2023
+      - POSTGRES_USER=latincouver
+      - POSTGRES_DB=latincouver
     ports:
       - 5434:5432
     volumes:

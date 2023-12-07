@@ -36,6 +36,9 @@ urlpatterns = [
     path('api/v1/hr/leave-request/', views.LeaveRequestAPIView.as_view(), name="hr-leave-requests"),
     path('api/v1/hr/leave-request/<int:pk>/', views.LeaveRequestRetrieveUpdateDeleteAPIView.as_view(), name='hr-leave-requests-retrieve-update-delete'),
 
+    # Leave Request intended for Superusers | ADMINS | Power Users
+    path('api/v1/hr/leave-request/admin-access-level/<int:pk>', views.LeaveRequestAdminHandleRetrieveUpdateDeleteAPIView.as_view(), name="hr-leave-requests_admin-access-level-list-retrieve-update-delete"),
+
     #Vacation Setup
     path('api/v1/hr/vacation-setup/', views.VacationSetupAPIView.as_view(), name="hr-vacation-setup"),
     path('api/v1/hr/vacation-setup/<int:pk>/', views.VacationSetupRetrieveUpdateDeleteAPIView.as_view(), name='hr-vacation-setup--retrieve-update-delete'),

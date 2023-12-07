@@ -24,6 +24,7 @@ from .serializers import (
     VolunteerHourSerializer,
     ScheduleEmployeeSerializer,
     LeaveRequestSerializer,
+    LeaveRequestAdminPowerSerializer,
     EmergencyContactSerializers,
     DepartmentsSerializers,
     VacationSetupSerializer
@@ -461,6 +462,33 @@ class LeaveRequestRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIV
     queryset = LeaveRequest.objects.all()
     serializer_class = LeaveRequestSerializer
     lookup_field = "pk"
+
+    def perform_update(self, serializer):
+
+        aprroved = serializer.validated_data.get("approved")
+
+        if aprroved and self.request.user.is_authenticated:
+            approved_by = self.request.user
+            serializer.save(approved_by=approved_by)
+        serializer.save()
+
+
+# Leave Request for User amins | power users | superuser
+# retrieve | update | delete
+class LeaveRequestAdminHandleRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = LeaveRequest.objects.all()
+    serializer_class = LeaveRequestAdminPowerSerializer
+    lookup_field = "pk"
+
+    def perform_update(self, serializer):
+        aprroved = serializer.validated_data.get("approved")
+        if aprroved:
+            if self.request.user.is_authenticated:
+                approved_by = self.request.user
+                serializer.save(approved_by=approved_by)
+
+        serializer.save()
 
 
 # list | create

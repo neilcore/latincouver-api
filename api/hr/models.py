@@ -260,9 +260,6 @@ class VolunteerHour(models.Model):
         return f"{self.volunteer.user.last_name} {self.volunteer.user.first_name}"
     
 
-
-
-
 # Schedules
 class ScheduleEmployee(models.Model):
     DAY_CHOICES = [
@@ -306,6 +303,14 @@ class LeaveRequest(models.Model):
     leave_type = models.CharField(max_length=2, choices=LEAVE_TYPES)
     description = models.TextField()
     approved = models.BooleanField(default=False)
+    approved_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="approved_by_user_fk")
+
+    def save(self, *args, **kwargs):
+        if self.approved == False:
+            if self.approved_by:
+                self.approved_by = None 
+
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.employee.user.first_name} {self.employee.user.last_name} - {self.start_date} to {self.end_date} ({self.leave_type})"
