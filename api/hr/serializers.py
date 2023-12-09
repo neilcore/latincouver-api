@@ -137,7 +137,7 @@ class LeaveRequestAdminPowerSerializer(serializers.ModelSerializer):
     approved_by_name = serializers.StringRelatedField(source="approved_by", many=False, read_only=True)
     class Meta:
         model = LeaveRequest
-        fields = ['pk', 'employee', 'employee_name', 'start_date', 'end_date', 'leave_type', 'description', 'approved', 'approved', 'approved_by_name']
+        fields = ['pk', 'employee', 'employee_name', 'start_date', 'end_date', 'leave_type', 'description', 'approved', 'approved_by_name']
 
 
 class VacationSetupSerializer(serializers.ModelSerializer):
