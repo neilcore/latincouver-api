@@ -1,7 +1,6 @@
 from django.urls import path
 from . import views
 
-
 urlpatterns = [
     path('', views.HomeView.as_view(), name ='home'),
     path('api/logout/', views.LogoutView.as_view(), name ='logout'),
@@ -44,7 +43,7 @@ urlpatterns = [
     path('api/v1/hr/vacation-setup/<int:pk>/', views.VacationSetupRetrieveUpdateDeleteAPIView.as_view(), name='hr-vacation-setup--retrieve-update-delete'),
     #Emergency Contact
     path('api/v1/hr/emergency-contact/', views.EmergencyContactAPIView.as_view(), name="hr-emergency-contacts"),
-    path('api/v1/hr/emergency-contact/<int:pk>/', views.EmergencyContactRetrieveUpdateDeleteAPIView.as_view(), name='hr-emergency-contact-retrieve-update-delete'),
+    path('api/v1/hr/emergency-contact/<int:pk>/', views.EmergencyContactRetrieveUpdateDeleteAPIView.as_view(), name='emergency-contact-retrieve-update-delete'),
     #Department
     path('api/v1/hr/departments/', views.DepartmentAPIView.as_view(), name="hr-departments"),
     path('api/v1/hr/departments/<int:pk>/', views.DepartmentDetailsUpdateDestroyAPIView.as_view(), name="hr-department-detail"),

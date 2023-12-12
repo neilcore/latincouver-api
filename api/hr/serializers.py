@@ -38,13 +38,32 @@ class EmployeeListCreateSerializer(serializers.ModelSerializer):
     active_status = serializers.StringRelatedField(source="user.is_active", read_only=True)
     department_names = serializers.StringRelatedField(source="department", many=True, read_only=True)
     role = serializers.StringRelatedField(source="title", many=False, read_only=True)
+    emergency_contact = serializers.SerializerMethodField()
+    employee_emergency_contact_fk = serializers.HyperlinkedRelatedField(
+        many=True,
+        read_only=True,
+        view_name='emergency-contact-retrieve-update-delete'
+    )
+
+    def get_emergency_contact(self, obj):
+        emergency_contacts = obj.employee_emergency_contact_fk.all()
+        emergency_contacts_list = []
+        for i in emergency_contacts:
+            emergency_contacts_list.append({
+                "pk": i.pk,
+                "employee": f'{i.employee.user.first_name} {i.employee.user.last_name}',
+                "name": i.name,
+                "relationship": i.relationship,
+                "phone": i.phone
+            })
+        return emergency_contacts_list
 
     class Meta:
         model=Employee
         fields = [
             'pk', 'user', 'user_info', 'active_status', 'department', 'department_names', 'title', 'role', 'bio', 'work_type', 'pay_method',
-            'salary', 'is_manager', 'start_date', 'end_date', 'notes', 'phone_number',
-            'contract', 'gender', 'allergies', 'medical_condition', 'photo'
+            'salary', 'is_manager', 'start_date', 'end_date', 'notes', 'phone_number', 'contract', 'gender', 'allergies', 'medical_condition',
+            'emergency_contact', 'employee_emergency_contact_fk', 'photo'
         ]
 
 
