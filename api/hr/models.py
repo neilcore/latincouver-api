@@ -120,7 +120,7 @@ class Employee(
     @property
     def name(self):
         if self.user.first_name:
-            return f'{self.user.first_name}ssssss {self.user.last_name}'
+            return f'{self.user.first_name} {self.user.last_name}'
         return f"{self.user.last_name}"
 
     def __str__(self):
