@@ -2,7 +2,8 @@ from django.contrib import admin
 from .models import (
     Employee, Contractor, JobTitle, VolunteerHour,
     Volunteer, VolunteerApplication, VolunteeringArea, VolunteerSkill,
-    ScheduleEmployee, Departments, LeaveRequest, EmergencyContact, VacationSetup
+    ScheduleEmployee, Departments, LeaveRequest, EmergencyContact, VacationSetup,
+    Policies
 )
 
 
@@ -79,6 +80,14 @@ class CustomLeaveRequestAdmin(admin.ModelAdmin):
         )}),
     )
     readonly_fields = ('approved_by',)
+
+
+
+class CustomPoliciesAdmin(admin.ModelAdmin):
+    model = Policies
+    list_display = ("name", "policy_type", "status")
+    
+    list_filter = ("name", "policy_type",)
     
 
 admin.site.register(JobTitle)
@@ -94,3 +103,4 @@ admin.site.register(VolunteerSkill)
 admin.site.register(VolunteerHour, CustomVolunteerHour)
 admin.site.register(ScheduleEmployee, CustomScheduleEmployee)
 admin.site.register(Departments)
+admin.site.register(Policies, CustomPoliciesAdmin)

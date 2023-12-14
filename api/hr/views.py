@@ -27,7 +27,8 @@ from .serializers import (
     LeaveRequestAdminPowerSerializer,
     EmergencyContactSerializers,
     DepartmentsSerializers,
-    VacationSetupSerializer
+    VacationSetupSerializer,
+    PoliciesSerializers
 
 )
 
@@ -35,7 +36,7 @@ from .serializers import (
 from .models import (
     JobTitle, Employee, Contractor, Volunteer, VolunteerSkill, VolunteeringArea,
     VolunteerApplication, VolunteerHour, ScheduleEmployee, LeaveRequest,
-    EmergencyContact, Departments, VacationSetup
+    EmergencyContact, Departments, VacationSetup, Policies
 )
 
 
@@ -459,24 +460,26 @@ class LeaveRequestAPIView(generics.ListCreateAPIView):
 
 # retireve | update | delete
 class LeaveRequestRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = LeaveRequest.objects.all()
     serializer_class = LeaveRequestSerializer
     lookup_field = "pk"
 
-    def perform_update(self, serializer):
+    # def perform_update(self, serializer):
 
-        aprroved = serializer.validated_data.get("approved")
+    #     aprroved = serializer.validated_data.get("approved")
 
-        if aprroved and self.request.user.is_authenticated:
-            approved_by = self.request.user
-            serializer.save(approved_by=approved_by)
-        serializer.save()
+    #     if aprroved and self.request.user.is_authenticated:
+    #         approved_by = self.request.user
+    #         serializer.save(approved_by=approved_by)
+    #     serializer.save()
 
 
 # Leave Request for User amins | power users | superuser
+
 # retrieve | update | delete
 class LeaveRequestAdminHandleRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_class= [IsAuthenticatedOrReadOnly]
     queryset = LeaveRequest.objects.all()
     serializer_class = LeaveRequestAdminPowerSerializer
     lookup_field = "pk"
@@ -505,7 +508,7 @@ class EmergencyContactRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroy
     lookup_field = "pk"
 
 
-
+# list | create
 class DepartmentAPIView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
 
@@ -514,9 +517,9 @@ class DepartmentAPIView(generics.ListCreateAPIView):
     serializer_class = DepartmentsSerializers
 
 
-
+# retrieve | update | delete
 class DepartmentDetailsUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     queryset = Departments.objects.all()
     serializer_class = DepartmentsSerializers
@@ -526,14 +529,29 @@ class DepartmentDetailsUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIVie
 
 # list | create
 class VacationSetupAPIView(generics.ListCreateAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = VacationSetup.objects.all()
     serializer_class = VacationSetupSerializer
 
 
-# retireve | update | delete
+# retrieve | update | delete
 class VacationSetupRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = VacationSetup.objects.all()
     serializer_class = VacationSetupSerializer
     lookup_field = "pk"
+
+
+#Policies
+
+# list | create
+class PoliciesAPIView(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    queryset = Policies.objects.all()
+    serializer_class = PoliciesSerializers
+
+# retrieve | update | delete
+class PoliciesRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    queryset = Policies.objects.all()
+    serializer_class = PoliciesSerializers

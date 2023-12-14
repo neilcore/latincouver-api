@@ -36,7 +36,7 @@ urlpatterns = [
     path('api/v1/hr/leave-request/<int:pk>/', views.LeaveRequestRetrieveUpdateDeleteAPIView.as_view(), name='hr-leave-requests-retrieve-update-delete'),
 
     # Leave Request intended for Superusers | ADMINS | Power Users
-    path('api/v1/hr/leave-request/admin-access-level/<int:pk>', views.LeaveRequestAdminHandleRetrieveUpdateDeleteAPIView.as_view(), name="hr-leave-requests_admin-access-level-list-retrieve-update-delete"),
+    path('api/v1/hr/leave-request/admin-access-level/<int:pk>/', views.LeaveRequestAdminHandleRetrieveUpdateDeleteAPIView.as_view(), name="hr-leave-requests_admin-access-level-list-retrieve-update-delete"),
 
     #Vacation Setup
     path('api/v1/hr/vacation-setup/', views.VacationSetupAPIView.as_view(), name="hr-vacation-setup"),
@@ -47,5 +47,8 @@ urlpatterns = [
     #Department
     path('api/v1/hr/departments/', views.DepartmentAPIView.as_view(), name="hr-departments"),
     path('api/v1/hr/departments/<int:pk>/', views.DepartmentDetailsUpdateDestroyAPIView.as_view(), name="hr-department-detail"),
+    #Policy
+    path('api/v1/hr/policies/', views.PoliciesAPIView.as_view(), name="hr-policies-list-create"),
+    path('api/v1/hr/policies/<int:pk>/', views.PoliciesRetrieveUpdateDeleteAPIView.as_view(), name="hr-policies-retrieve-update-delete"),
 
 ]

@@ -28,6 +28,10 @@ class Status(models.IntegerChoices):
     AR = 2, 'Archived'
     FR = 3, 'Former'
     DLT = 4, 'Delete'
+    PND = 5, 'Pending',
+    ACPT = 6, 'Accepted',
+    RJT = 7, 'Rejected',
+    APV = 8, 'Aprroved',
 
 class WorkType(models.IntegerChoices):
     FT = 1, 'Full Time'
@@ -244,6 +248,7 @@ class VolunteerHour(models.Model):
     time_in = models.TimeField(default=datetime.now().strftime('%H:%M:%S'))
     time_out = models.TimeField(default=datetime.now().strftime('%H:%M:%S'))
     hours_worked = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    description = models.TextField(null=True, blank=True)
     location = models.IntegerField(choices=LocationChoices.choices, default=2)    
 
     def save(self, *args, **kwargs):
@@ -304,11 +309,15 @@ class LeaveRequest(models.Model):
     description = models.TextField()
     approved = models.BooleanField(default=False)
     approved_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="approved_by_user_fk")
+    status = models.IntegerField(choices=Status.choices, default=5)
 
     def save(self, *args, **kwargs):
+        if self.approved:
+            self.status = 8
         if self.approved == False:
             if self.approved_by:
-                self.approved_by = None 
+                self.approved_by = None
+                self.status = 5
 
         super().save(*args, **kwargs)
 
@@ -337,3 +346,17 @@ class EmergencyContact(models.Model):
 
     def __str__(self):
         return f"{self.employee} _ {self.name}"
+    
+#NEW
+class Policies(models.Model):
+    name = models.CharField(max_length=100)
+    policy_type = models.CharField(max_length=150)
+    url = models.URLField(blank=True, null=True)
+    status = models.IntegerField(choices=Status.choices, default=1)
+
+
+    def __str__(self) -> str:
+        return self.name
+    
+    class Meta:
+        verbose_name_plural = 'Policies'
