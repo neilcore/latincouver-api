@@ -433,8 +433,12 @@ class VolunteerHourRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPI
     permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = VolunteerHour.objects.all()
     serializer_class = VolunteerHourSerializer
-
     lookup_field = "pk"
+
+    def perform_update(self, serializer):
+        if self.request.user.is_authenticated:
+            serializer.save(updated_by=self.request.user)
+        serializer.save()
 
 # list | create
 class ScheduleEmployeeAPIView(generics.ListCreateAPIView):
@@ -465,14 +469,11 @@ class LeaveRequestRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIV
     serializer_class = LeaveRequestSerializer
     lookup_field = "pk"
 
-    # def perform_update(self, serializer):
-
-    #     aprroved = serializer.validated_data.get("approved")
-
-    #     if aprroved and self.request.user.is_authenticated:
-    #         approved_by = self.request.user
-    #         serializer.save(approved_by=approved_by)
-    #     serializer.save()
+    def perform_update(self, serializer):
+        if self.request.user.is_authenticated:
+            updated_by = self.request.user
+            serializer.save(updated_by=updated_by)
+        serializer.save()
 
 
 # Leave Request for User amins | power users | superuser
@@ -486,11 +487,12 @@ class LeaveRequestAdminHandleRetrieveUpdateDeleteAPIView(generics.RetrieveUpdate
 
     def perform_update(self, serializer):
         aprroved = serializer.validated_data.get("approved")
-        if aprroved:
-            if self.request.user.is_authenticated:
-                approved_by = self.request.user
-                serializer.save(approved_by=approved_by)
-
+        updated = dict()
+        if self.request.user.is_authenticated:
+            updated.update({"updated_by": self.request.user})
+            if aprroved:
+                updated.update({"approved_by": self.request.user})
+            serializer.save(**updated)
         serializer.save()
 
 
@@ -555,3 +557,8 @@ class PoliciesRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView)
     permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Policies.objects.all()
     serializer_class = PoliciesSerializers
+
+    def perform_update(self, serializer):
+        if self.request.user.is_authenticated:
+            serializer.save(updated_by=self.request.user)
+        serializer.save()

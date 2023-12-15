@@ -126,10 +126,11 @@ class VolunteeringApplicationSerializer(serializers.ModelSerializer):
 class VolunteerHourSerializer(serializers.ModelSerializer):
     volunteer_name = serializers.StringRelatedField(many=False, source="volunteer")
     hours_worked = DecimalField(read_only=True, max_digits=5, decimal_places=2)
+    updated_by = serializers.StringRelatedField(read_only=True, many=False)
     class Meta:
         model = VolunteerHour
         fields = [
-            "pk", "volunteer", "volunteer_name", "time_in", "time_out", "hours_worked", "date", "location"
+            "pk", "volunteer", "volunteer_name", "time_in", "time_out", "hours_worked", "date", "location", "updated_by"
         ]
 
 
@@ -147,11 +148,12 @@ class LeaveRequestSerializer(serializers.ModelSerializer):
     employee_name = serializers.StringRelatedField(source="employee", many=False)
     approved_by_name = serializers.StringRelatedField(source="approved_by", many=False)
     approved = BooleanField(read_only=True)
+    updated_by = serializers.StringRelatedField(many=False, read_only=True)
     class Meta:
         model = LeaveRequest
         fields = [
             'pk', 'employee', 'employee_name', 'start_date', 'end_date',
-            'leave_type', 'description', 'approved', 'approved_by_name', 'status'
+            'leave_type', 'description', 'approved', 'approved_by_name', 'status', 'updated_by'
         ]
 
 # this is Leave Request intended for Admins | Superusers | Power Users
@@ -159,9 +161,13 @@ class LeaveRequestAdminPowerSerializer(serializers.ModelSerializer):
     employee_name = serializers.StringRelatedField(source="employee", many=False)
     approved_by_name = serializers.StringRelatedField(source="approved_by", many=False, read_only=True)
     status = IntegerField(read_only=True)
+    updated_by = serializers.StringRelatedField(many=False, read_only=True)
     class Meta:
         model = LeaveRequest
-        fields = ['pk', 'employee', 'employee_name', 'start_date', 'end_date', 'leave_type', 'description', 'approved', 'approved_by_name', 'status']
+        fields = [
+            'pk', 'employee', 'employee_name', 'start_date', 'end_date', 'leave_type', 'description',
+            'approved', 'approved_by_name', 'status', 'updated_by'
+        ]
 
 
 class VacationSetupSerializer(serializers.ModelSerializer):
@@ -187,7 +193,9 @@ class DepartmentsSerializers(serializers.ModelSerializer):
 
 
 class PoliciesSerializers(serializers.ModelSerializer):
-
+    updated_by = serializers.StringRelatedField(read_only=True, many=False)
     class Meta:
         model = Policies
-        fields = "__all__"
+        fields = [
+            'pk', 'name', 'policy_type', 'url', 'status', 'updated_by'
+        ]

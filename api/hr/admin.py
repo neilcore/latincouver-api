@@ -38,6 +38,8 @@ class CustomVolunteerHour(admin.ModelAdmin):
     def volunteer_username(self, obj) -> str:
         return f"{obj.volunteer.user.first_name} {obj.volunteer.user.last_name}"
     
+    readonly_fields = ('hours_worked','updated_by',)
+    
 
 
 class CustomScheduleEmployee(admin.ModelAdmin):
@@ -76,18 +78,18 @@ class CustomLeaveRequestAdmin(admin.ModelAdmin):
             "start_date", "end_date"
         )}),
         ('Status', {"fields": (
-            "approved", "approved_by"
+            "approved", "approved_by", "updated_by"
         )}),
     )
-    readonly_fields = ('approved_by',)
+    readonly_fields = ('approved_by', 'updated_by',)
 
 
 
 class CustomPoliciesAdmin(admin.ModelAdmin):
     model = Policies
-    list_display = ("name", "policy_type", "status")
-    
+    list_display = ("name", "policy_type", "status", "updated_by")
     list_filter = ("name", "policy_type",)
+    readonly_fields = ('updated_by',)
     
 
 admin.site.register(JobTitle)

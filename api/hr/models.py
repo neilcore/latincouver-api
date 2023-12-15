@@ -249,7 +249,8 @@ class VolunteerHour(models.Model):
     time_out = models.TimeField(default=datetime.now().strftime('%H:%M:%S'))
     hours_worked = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
     description = models.TextField(null=True, blank=True)
-    location = models.IntegerField(choices=LocationChoices.choices, default=2)    
+    location = models.IntegerField(choices=LocationChoices.choices, default=2)
+    updated_by = models.ForeignKey(User, on_delete=models.SET_NULL, related_name="updated_by_volunteer_hour", null=True) 
 
     def save(self, *args, **kwargs):
 
@@ -310,6 +311,7 @@ class LeaveRequest(models.Model):
     approved = models.BooleanField(default=False)
     approved_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="approved_by_user_fk")
     status = models.IntegerField(choices=Status.choices, default=5)
+    updated_by = models.ForeignKey(User, on_delete=models.SET_NULL, related_name="updated_by_leave_request", null=True)
 
     def save(self, *args, **kwargs):
         if self.approved:
@@ -353,7 +355,7 @@ class Policies(models.Model):
     policy_type = models.CharField(max_length=150)
     url = models.URLField(blank=True, null=True)
     status = models.IntegerField(choices=Status.choices, default=1)
-
+    updated_by = models.ForeignKey(User, on_delete=models.SET_NULL, related_name="updated_by_policy", null=True)
 
     def __str__(self) -> str:
         return self.name
