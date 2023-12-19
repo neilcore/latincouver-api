@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:15.3-bullseye
+    environment:
+      - POSTGRES_PASSWORD=latincouver2023
+      - POSTGRES_USER=latincouver
+      - POSTGRES_DB=latincouver
+    ports:
+      - 5434:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+  api:
+    build:
+      context: ./api
+    ports:
+      - 8000:8000
+
+    volumes:
+      - ./api:/api
+    command: python manage.py runserver 0.0.0.0:8000
+    depends_on:
+      - db
+
+volumes:
+  pgdata:
