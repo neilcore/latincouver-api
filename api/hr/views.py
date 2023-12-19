@@ -353,7 +353,7 @@ class VolunteeringAreaRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroy
 
 # list and create
 class VolunteeringApplicationAPIView(generics.ListCreateAPIView):
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    # remove authentication for this
     queryset = VolunteerApplication.objects.all()
     serializer_class = VolunteeringApplicationSerializer
 
@@ -522,7 +522,6 @@ class DepartmentAPIView(generics.ListCreateAPIView):
 
 # retrieve | update | delete
 class DepartmentDetailsUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
-    # ========== CHANGE TO -> IsAuthenticatedOrReadOnly
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     queryset = Departments.objects.all()
@@ -533,7 +532,6 @@ class DepartmentDetailsUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIVie
 
 # list | create
 class VacationSetupAPIView(generics.ListCreateAPIView):
-    # =========== CHANGE TO -> IsAuthenticatedOrReadOnly
     permission_classes = IsAuthenticatedOrReadOnly
     queryset = VacationSetup.objects.all()
     serializer_class = VacationSetupSerializer
