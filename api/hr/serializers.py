@@ -200,7 +200,4 @@ class PoliciesSerializers(serializers.ModelSerializer):
                 'pk', 'name', 'policy_type', 'url', 'status', 'updated_by'
         ]
 
-# must import Policies model on top
-# created PoliciesSerializers
-# add status and updates_by on LeaveRequestAdminPowerSerializer and LeaveRequestSerializer
-# add updated_by on VolunteerHourSerializer
+

@@ -565,11 +565,3 @@ class PoliciesRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView)
         if self.request.user.is_authenticated:
             serializer.save(updated_by=self.request.user)
         serializer.save()
-
-
-
-# must import PoliciesSerializers on top
-# must import POlicies model on top
-# created PoliciesAPIView
-# update -> perform_update method from LeaveRequestAdminHandleRetrieveUpdateDeleteAPIView
-# update -> perform_update method from LeaveRequestRetrieveUpdateDeleteAPIView(
