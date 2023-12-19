@@ -27,7 +27,8 @@ from .serializers import (
     LeaveRequestAdminPowerSerializer,
     EmergencyContactSerializers,
     DepartmentsSerializers,
-    VacationSetupSerializer
+    VacationSetupSerializer,
+    PoliciesSerializers
 
 )
 
@@ -35,7 +36,7 @@ from .serializers import (
 from .models import (
     JobTitle, Employee, Contractor, Volunteer, VolunteerSkill, VolunteeringArea,
     VolunteerApplication, VolunteerHour, ScheduleEmployee, LeaveRequest,
-    EmergencyContact, Departments, VacationSetup
+    EmergencyContact, Departments, VacationSetup, Policies
 )
 
 
@@ -58,6 +59,7 @@ class LogoutView(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
+# Countries choices
 class CountriesChoicesAPI(APIView):
 
     def get(self, request):
@@ -72,6 +74,7 @@ class JobTitleAPIView(generics.ListCreateAPIView):
     queryset = JobTitle.objects.all()
     serializer_class = JobTitleSerializer
 
+
 # retrieve and update
 class JobTitleDetailUpdateAPIView(generics.RetrieveUpdateAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
@@ -79,12 +82,14 @@ class JobTitleDetailUpdateAPIView(generics.RetrieveUpdateAPIView):
     serializer_class = JobTitleSerializer
     lookup_field = "pk"
 
+
 # destroy
 class JobTitleDestropAPI(generics.DestroyAPIView):
     permission_classes = [IsAuthenticated]
     queryset = JobTitle.objects.all()
     serializer_class = JobTitleSerializer
     lookup_field = "pk"
+
 
 
 # list and create
@@ -407,7 +412,7 @@ class VolunteeringApplicationAPIView(generics.ListCreateAPIView):
 
 
 
-# retireive | update |delete
+# retrieve | update |delete
 class VolunteeringApplicationRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = VolunteerApplication.objects.all()
@@ -457,36 +462,36 @@ class LeaveRequestAPIView(generics.ListCreateAPIView):
     serializer_class = LeaveRequestSerializer
 
 
-# retireve | update | delete
+# retrieve | update | delete
 class LeaveRequestRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = LeaveRequest.objects.all()
     serializer_class = LeaveRequestSerializer
     lookup_field = "pk"
 
     def perform_update(self, serializer):
 
-        aprroved = serializer.validated_data.get("approved")
-
-        if aprroved and self.request.user.is_authenticated:
-            approved_by = self.request.user
-            serializer.save(approved_by=approved_by)
+        if self.request.user.is_authenticated:
+            updated_by = self.request.user
+            serializer.save(updated_by=updated_by)
         serializer.save()
 
 
 # Leave Request for User amins | power users | superuser
 # retrieve | update | delete
 class LeaveRequestAdminHandleRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = LeaveRequest.objects.all()
     serializer_class = LeaveRequestAdminPowerSerializer
     lookup_field = "pk"
 
     def perform_update(self, serializer):
         aprroved = serializer.validated_data.get("approved")
-        if aprroved:
-            if self.request.user.is_authenticated:
-                approved_by = self.request.user
-                serializer.save(approved_by=approved_by)
+        updated = dict()
+        if self.request.user.is_authenticated:
+            if approved:
+                updated.update({"approved_by": self.request.user})
+            serializer.save(**updated)
 
         serializer.save()
 
@@ -497,7 +502,8 @@ class EmergencyContactAPIView(generics.ListCreateAPIView):
     queryset = EmergencyContact.objects.all()
     serializer_class = EmergencyContactSerializers
 
-# retireve | update | delete
+
+# retrieve | update | delete
 class EmergencyContactRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = EmergencyContact.objects.all()
@@ -505,7 +511,7 @@ class EmergencyContactRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroy
     lookup_field = "pk"
 
 
-
+# list | create
 class DepartmentAPIView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
 
@@ -514,9 +520,10 @@ class DepartmentAPIView(generics.ListCreateAPIView):
     serializer_class = DepartmentsSerializers
 
 
-
+# retrieve | update | delete
 class DepartmentDetailsUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [IsAuthenticated]
+    # ========== CHANGE TO -> IsAuthenticatedOrReadOnly
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     queryset = Departments.objects.all()
     serializer_class = DepartmentsSerializers
@@ -526,14 +533,43 @@ class DepartmentDetailsUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIVie
 
 # list | create
 class VacationSetupAPIView(generics.ListCreateAPIView):
-    permission_classes = [IsAuthenticated]
+    # =========== CHANGE TO -> IsAuthenticatedOrReadOnly
+    permission_classes = IsAuthenticatedOrReadOnly
     queryset = VacationSetup.objects.all()
     serializer_class = VacationSetupSerializer
 
 
-# retireve | update | delete
+# retrieve | update | delete
 class VacationSetupRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = VacationSetup.objects.all()
     serializer_class = VacationSetupSerializer
     lookup_field = "pk"
+
+
+#Policies
+
+# list | create
+class PoliciesAPIView(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    queryset = Policies.objects.all()
+    serializer_class = PoliciesSerializers
+
+# retrieve | update | delete
+class PoliciesRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    queryset = Policies.objects.all()
+    serializer_class = PoliciesSerializers
+
+    def perform_update(self, serializer):
+        if self.request.user.is_authenticated:
+            serializer.save(updated_by=self.request.user)
+        serializer.save()
+
+
+
+# must import PoliciesSerializers on top
+# must import POlicies model on top
+# created PoliciesAPIView
+# update -> perform_update method from LeaveRequestAdminHandleRetrieveUpdateDeleteAPIView
+# update -> perform_update method from LeaveRequestRetrieveUpdateDeleteAPIView(

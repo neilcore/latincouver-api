@@ -38,6 +38,7 @@ ALLOWED_HOSTS = ["*"]
 INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'hr.apps.HrConfig',
+    'pmo.apps.PmoConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -56,6 +57,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
     'django_countries',
+    'import_export',
 ]
 
 MIDDLEWARE = [

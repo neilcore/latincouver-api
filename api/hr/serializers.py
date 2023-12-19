@@ -4,7 +4,8 @@ from rest_framework.fields import CharField, DecimalField, EmailField, DateTimeF
 
 from .models import (
     Employee, Contractor, JobTitle, Volunteer, VolunteerSkill, VolunteeringArea,
-    VolunteerApplication, VolunteerHour, ScheduleEmployee, LeaveRequest, EmergencyContact, Departments, VacationSetup
+    VolunteerApplication, VolunteerHour, ScheduleEmployee, LeaveRequest, EmergencyContact, Departments, VacationSetup,
+    Policies
     )
 
 from users.serializers import UserPublicSerializer
@@ -125,10 +126,11 @@ class VolunteeringApplicationSerializer(serializers.ModelSerializer):
 class VolunteerHourSerializer(serializers.ModelSerializer):
     volunteer_name = serializers.StringRelatedField(many=False, source="volunteer")
     hours_worked = DecimalField(read_only=True, max_digits=5, decimal_places=2)
+    updated_by = serializers.StringRelatedField(read_only=True, many=False)
     class Meta:
         model = VolunteerHour
         fields = [
-            "pk", "volunteer", "volunteer_name", "time_in", "time_out", "hours_worked", "date", "location"
+            "pk", "volunteer", "volunteer_name", "time_in", "time_out", "hours_worked", "date", "location", "updated_by"
         ]
 
 
@@ -141,22 +143,32 @@ class ScheduleEmployeeSerializer(serializers.ModelSerializer):
             "pk", "employee", "employee_name", "start_time", "end_time", "home_office", "day_of_week"
         ]
 
+
 # maybe we can only use this for employees
 class LeaveRequestSerializer(serializers.ModelSerializer):
     employee_name = serializers.StringRelatedField(source="employee", many=False)
     approved_by_name = serializers.StringRelatedField(source="approved_by", many=False)
     approved = BooleanField(read_only=True)
+    updated_by = serializers.StringRelatedField(many=False, read_only=True)
     class Meta:
         model = LeaveRequest
-        fields = ['pk', 'employee', 'employee_name', 'start_date', 'end_date', 'leave_type', 'description', 'approved', 'approved_by_name']
+        fields = [
+                'pk', 'employee', 'employee_name', 'start_date', 'end_date', 'leave_type',
+                'description', 'approved', 'approved_by_name', 'status', 'updated_by'
+        ]
 
 # this is Leave Request intended for Admins | Superusers | Power Users
 class LeaveRequestAdminPowerSerializer(serializers.ModelSerializer):
     employee_name = serializers.StringRelatedField(source="employee", many=False)
     approved_by_name = serializers.StringRelatedField(source="approved_by", many=False, read_only=True)
+    status = IntegerField(read_only=True)
+    updated_by = serializers.StringRelatedField(many=False, read_only=True)
     class Meta:
         model = LeaveRequest
-        fields = ['pk', 'employee', 'employee_name', 'start_date', 'end_date', 'leave_type', 'description', 'approved', 'approved_by_name']
+        fields = [
+                'pk', 'employee', 'employee_name', 'start_date', 'end_date', 'leave_type', 'description',
+                'approved', 'approved_by_name', 'status', 'updated_by'
+        ]
 
 
 class VacationSetupSerializer(serializers.ModelSerializer):
@@ -178,3 +190,17 @@ class DepartmentsSerializers(serializers.ModelSerializer):
     class Meta:
         model = Departments
         fields = "__all__"
+
+
+class PoliciesSerializers(serializers.ModelSerializer):
+    updated_by = serializers.StringRelatedField(read_only=True, many=False)
+    class Meta:
+        model=Policies
+        fields=[
+                'pk', 'name', 'policy_type', 'url', 'status', 'updated_by'
+        ]
+
+# must import Policies model on top
+# created PoliciesSerializers
+# add status and updates_by on LeaveRequestAdminPowerSerializer and LeaveRequestSerializer
+# add updated_by on VolunteerHourSerializer
